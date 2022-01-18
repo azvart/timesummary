@@ -1,0 +1,41 @@
+.group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  input {
+    display: block;
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #d2d2d2;
+    outline: 0;
+    font-size: 16px;
+    color: #212121;
+    padding: 7px 0;
+    background: white no-repeat;
+    transition: border-color 0.2s;
+    background-image: linear-gradient(to bottom, #1abc9c, #1abc9c), linear-gradient(to bottom, silver, silver);
+    background-size: 0 2px, 100% 1px;
+    background-position: 50% 100%, 50% 100%;
+    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08,1);
+    &:focus{
+      background-size: 100% 2px, 100% 1px;
+      outline: none;
+    }
+  }
+  input:focus ~ label,
+  input:valid ~ label{
+    top: -15px;
+    font-size: 14px;
+    color: #1abc9c;
+  }
+  label{
+    position: absolute;
+    top: 20px;
+    display: block;
+    transition: 0.2s;
+    font-size: 16px;
+    color: #9b9b9b;
+  }
+
+}

@@ -1,0 +1,92 @@
+.header {
+  display: flex;
+  background: #3b6c8e;
+  clear: both;
+  height: 110px;
+  width: 100vw;
+}
+.logo {
+  width: 260px;
+  text-align: center;
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: inherit;
+}
+.headerMenu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  // margin-left: 260px;
+  min-width: 900px;
+  height: 110px;
+  :nth-child(odd){
+    background: rgba(255,255,255,0.1);
+  }
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.navBlock {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  height: 110px;
+  padding: 25px 20px 9px 20px;
+  color: #fff;
+  opacity: 0.5;
+  border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  span {
+    margin-top: 5px;
+  }
+  &:hover {
+    opacity: 1;
+  }
+}
+.wrapProfile {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  color: #fff;
+  margin-bottom: 5px;
+  small {
+    font-size: 11px;
+    opacity: 0.6;
+    color: #fff;
+    font-family: sans-serif;
+    font-style: italic;
+  }
+  h5 {
+    margin: 0;
+    margin-right: 2px;
+  }
+  span {
+    margin-right: 10px!important;
+  }
+}
+.wrapButtons {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 205px;
+
+  button {
+    background: rgba(255,255,255,0.1);
+    padding: 4px 5px 3px 5px;
+    color: #fff;
+    border: none;
+    font-size: 11px;
+    line-height: normal;
+    margin-bottom: 1px;
+    text-align: start;
+    cursor: pointer;
+    &:hover {
+      background: rgba(255,255,255,0.2)
+    }
+  }
+}

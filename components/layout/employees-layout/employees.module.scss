@@ -1,0 +1,125 @@
+.container {
+  width: calc(100vw - 260px);
+  height: calc(100vh - 180px);
+}
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  margin: 20px;
+  border-bottom: 1px solid #9999;
+}
+.headerWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 20px;
+  height: 60px;
+  h1 {
+    margin: 0;
+    color: #3b6c8e;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 32px;
+    font-family: 'RobotoLight', 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  h5 {
+    margin: 0;
+    font-family: 'RobotoLight', 'Helvetica Neue', Helvetica, sans-serif;
+    color: #9999;
+    font-weight: normal;
+    line-height: normal;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+.searchbBar {
+  height: 30px;
+  width: 200px;
+  border: 1px solid #9999;
+  padding: 5px;
+  outline: none;
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.sortList {
+  width: 100px;
+  height: 50px;
+  margin-left: 30px;
+  margin-bottom: 20px;
+  
+  button {
+    width: 100%;
+    color: #666;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  
+    &::after {
+      content: "";
+      height: 20px;
+      border-right: 1px solid #9999;
+      padding-left: 10px;
+      margin-right: 10px;
+    }
+    span {
+      padding: 5px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-family: 'RobotoLight', 'Helvetica Neue', Helvetica, sans-serif;
+      &:hover {
+        background-color: #9999;
+        opacity: 0.7;
+      }
+    }
+  }
+  :last-child::after {
+    border-right: none;
+    height: 0;
+  }
+}
+.activeBtn {
+  background-color: #000!important;
+  color: #fff;
+}
+.info {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: 20px;
+  font-size: 12px;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  h4 {
+    font-size: 16px;
+  }
+}
+.cardsWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.profileCardWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 450px;
+  padding: 10px;
+  border: 1px solid #9999;
+  margin: 0 30px;
+}
+.search {
+  position: relative;
+  span {
+    right: 25px;
+    top: 3px;
+  }
+}

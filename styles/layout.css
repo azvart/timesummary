@@ -1,0 +1,10 @@
+.layout-header {
+    background-color: salmon;
+    height: 50px;
+    margin-bottom: 30px;
+}
+.layout-footer {
+    background-color: rgb(141, 250, 114);
+    height: 50px;
+    margin-top: 30px;
+}

@@ -5,12 +5,26 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
-
 a {
   color: inherit;
   text-decoration: none;
 }
-
 * {
   box-sizing: border-box;
 }
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 180px);
+}
+.messageWrap {
+  padding: 20px;
+  height: calc(100vh - 180px);
+}
+.container {
+  display: flex;
+}
+.pageContainer {
+  width: 100%;
+}
+
