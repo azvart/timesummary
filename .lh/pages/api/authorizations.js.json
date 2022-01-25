@@ -1,0 +1,58 @@
+{
+    "sourceFile": "pages/api/authorizations.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1642599966972,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642599981707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,8 @@\n \n \n \n async function handler(req, res){\n-  console.log(req.method);\n   const {method} = req;\n   const {email} = req.body;\n   await dbConnect();\n \n"
+                },
+                {
+                    "date": 1642600013532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,8 @@\n         }\n       }catch(error){\n         return res.status(400).json({message:error.message, status: false});\n       }\n-      break;\n     }\n     default:\n       return res.status(400).json({message:\"Incorrect password or email\", status: false});\n   }\n"
+                },
+                {
+                    "date": 1642658268774,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.find({email}).populate('passwords');\n+        const user = await User.find({email}).populate('passwords',{strictPopulate: false});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658583984,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.find({email}).populate('passwords',{strictPopulate: false});\n+        const user = await User.find({email}).populate('passwords');\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658613512,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.find({email}).populate('passwords');\n+        const user = await User.find({email}).populate({path: 'passwords',select:'passwords'});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658755631,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.find({email}).populate({path: 'passwords',select:'passwords'});\n+        const user = await User.populate('passwords');\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658785411,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.populate('passwords');\n+        const user = await User.populate('passwords',{path:'passwords',select:'password'});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658793982,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.populate('passwords',{path:'passwords',select:'password'});\n+        const user = await User.populate('passwords',{path:'passwords',select:'userPassword'});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642658824056,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.populate('passwords',{path:'passwords',select:'userPassword'});\n+        const user = await User.populate({},{path:'passwords',select:'userPassword'});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                },
+                {
+                    "date": 1642659066378,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n   switch(method){\n     case \"GET\": {\n       try{\n-        const user = await User.populate({},{path:'passwords',select:'userPassword'});\n+        const user = await User.populate(Password,{path:'passwords',select:'userPassword'});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status:false});\n         }\n"
+                }
+            ],
+            "date": 1642599966972,
+            "name": "Commit-0",
+            "content": "import { Compare } from '../../lib';\nimport User from '../../models/user.model';\nimport Password from '../../models/password.model';\nimport dbConnect from '../../lib/mongooseConnect';\n\n\n\nasync function handler(req, res){\n  console.log(req.method);\n  const {method} = req;\n  const {email} = req.body;\n  await dbConnect();\n\n\n  switch(method){\n    case \"GET\": {\n      try{\n        const user = await User.find({email}).populate('passwords');\n        console.log(user);\n        if(!user){\n          return res.status(400).json({message:\"Invalid email\", status:false});\n        }\n      }catch(error){\n        return res.status(400).json({message:error.message, status: false});\n      }\n      break;\n    }\n    default:\n      return res.status(400).json({message:\"Incorrect password or email\", status: false});\n  }\n}\n\n\n\n\nexport default handler;"
+        }
+    ]
+}

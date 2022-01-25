@@ -1,0 +1,54 @@
+{
+    "sourceFile": "models/user.model.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 9,
+            "patches": [
+                {
+                    "date": 1642599140575,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642600104851,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,10 +12,11 @@\n     required:true,\n     index:{unique: true}\n   },\n   email:{\n-    type:String,\n-    required:true\n+    type: Schema.Types.ObjectId,\n+    ref: \"passwords\",\n+    required:false\n   },\n   password:{\n     type: Schema.Types.ObjectId,\n     required: false,\n"
+                },
+                {
+                    "date": 1642657125517,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,18 +14,18 @@\n   },\n   email:{\n     type: Schema.Types.ObjectId,\n     ref: \"passwords\",\n-    required:false\n+    required: false\n   },\n   password:{\n     type: Schema.Types.ObjectId,\n     required: false,\n     ref: 'passwords'\n   }\n });\n \n+mongoose.models = {}\n \n+const User = mongoose.model(\"users\", UserSchema);\n \n-const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n-\n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1642657932065,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,11 +12,9 @@\n     required:true,\n     index:{unique: true}\n   },\n   email:{\n-    type: Schema.Types.ObjectId,\n-    ref: \"passwords\",\n-    required: false\n+    type: String,\n   },\n   password:{\n     type: Schema.Types.ObjectId,\n     required: false,\n"
+                },
+                {
+                    "date": 1642660963089,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,13 +13,18 @@\n     index:{unique: true}\n   },\n   email:{\n     type: String,\n+    required: true\n   },\n+  // password:{\n+  //   type: Schema.Types.ObjectId,\n+  //   required: false,\n+  //   ref: 'passwords'\n+  // }\n   password:{\n-    type: Schema.Types.ObjectId,\n-    required: false,\n-    ref: 'passwords'\n+    type: String,\n+    required: true\n   }\n });\n \n mongoose.models = {}\n"
+                },
+                {
+                    "date": 1642666696006,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,13 +15,8 @@\n   email:{\n     type: String,\n     required: true\n   },\n-  // password:{\n-  //   type: Schema.Types.ObjectId,\n-  //   required: false,\n-  //   ref: 'passwords'\n-  // }\n   password:{\n     type: String,\n     required: true\n   }\n"
+                },
+                {
+                    "date": 1643007456561,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n     required: true\n   }\n });\n \n-mongoose.models = {}\n \n-const User = mongoose.model(\"users\", UserSchema);\n \n+const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n+\n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643013614335,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import mongoose, { Schema } from 'mongoose';\n+import mongoose, { Schema, Types } from 'mongoose';\n \n \n const UserSchema = new Schema({\n   name:{\n@@ -16,10 +16,10 @@\n     type: String,\n     required: true\n   },\n   password:{\n-    type: String,\n-    required: true\n+    type: Types.ObjectId,\n+    ref:\"passwords\"\n   }\n });\n \n \n"
+                },
+                {
+                    "date": 1643024351971,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n     ref:\"passwords\"\n   }\n });\n \n+mongoose.models = {}\n \n+const User =  mongoose.model(\"users\", UserSchema);\n \n-const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n-\n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643027809645,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,8 @@\n     ref:\"passwords\"\n   }\n });\n \n-mongoose.models = {}\n \n-const User =  mongoose.model(\"users\", UserSchema);\n+const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1642599140575,
+            "name": "Commit-0",
+            "content": "import mongoose, { Schema } from 'mongoose';\n\n\nconst UserSchema = new Schema({\n  name:{\n    type: String,\n    required: true,\n    index:{unique: true}\n  },\n  lastname:{\n    type:String,\n    required:true,\n    index:{unique: true}\n  },\n  email:{\n    type:String,\n    required:true\n  },\n  password:{\n    type: Schema.Types.ObjectId,\n    required: false,\n    ref: 'passwords'\n  }\n});\n\n\n\nconst User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n\nexport default User;"
+        }
+    ]
+}

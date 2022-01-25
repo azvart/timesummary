@@ -1,0 +1,230 @@
+{
+    "sourceFile": "pages/api/user/create.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 53,
+            "patches": [
+                {
+                    "date": 1643007820100,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643008619891,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   switch(method){\n \n     case \"POST\":\n       try{\n-\n+        \n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643013295600,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,8 +16,10 @@\n \n     case \"POST\":\n       try{\n         \n+\n+\n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643013344589,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,11 @@\n-import { Hash } from \"../../../lib\";\n+import { Hash, dbConnect } from \"../../../lib\";\n import User from '../../../models/user.model';\n import Password from '../../../models/password.model';\n \n \n \n \n-\n async function handler(req, res){\n \n   const {method} = req;\n \n@@ -15,11 +14,11 @@\n   switch(method){\n \n     case \"POST\":\n       try{\n-        \n \n \n+\n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643013350879,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,9 @@\n \n     case \"POST\":\n       try{\n \n+        await dbConnect();\n \n \n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643013563260,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,20 @@\n       try{\n \n         await dbConnect();\n \n+        const currentUser = await User.find({email: rea.body.email});\n+        if(currentUser){\n+          return res.status(400).json({message:\"User already yet\", status: false});\n+        }\n+        const hashPassword = await Hash(req.body.password);\n \n+        const pass = Password.create({password:hashPassword});\n+\n+        const user = await new User({name: req.body.name, email: req.body.email, password: pass._id}).save();\n+        pass.save();\n+        return res.status(200).json({message:\"User create\", status: true});\n+\n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643013983084,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n         const hashPassword = await Hash(req.body.password);\n \n-        const pass = Password.create({password:hashPassword});\n+        const pass = await Password.create({password:hashPassword});\n \n         const user = await new User({name: req.body.name, email: req.body.email, password: pass._id}).save();\n         pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n"
+                },
+                {
+                    "date": 1643014037779,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n         const hashPassword = await Hash(req.body.password);\n \n-        const pass = await Password.create({password:hashPassword});\n+        const pass = await Password.create({userPassword:hashPassword});\n \n         const user = await new User({name: req.body.name, email: req.body.email, password: pass._id}).save();\n         pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n"
+                },
+                {
+                    "date": 1643017268153,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         const hashPassword = await Hash(req.body.password);\n \n         const pass = await Password.create({userPassword:hashPassword});\n \n-        const user = await new User({name: req.body.name, email: req.body.email, password: pass._id}).save();\n+        const user = await new User({name: req.body.name,lastname: req.body.lastname, email: req.body.email, password: pass._id}).save();\n         pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n \n       }catch(e){\n"
+                },
+                {
+                    "date": 1643017356421,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n-import { Hash, dbConnect } from \"../../../lib\";\n+import { Hash } from \"../../../lib\";\n import User from '../../../models/user.model';\n import Password from '../../../models/password.model';\n+import dbConnect from '../../../lib/mongooseConnect';\n \n \n \n-\n async function handler(req, res){\n \n   const {method} = req;\n \n"
+                },
+                {
+                    "date": 1643017372399,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,17 +8,15 @@\n async function handler(req, res){\n \n   const {method} = req;\n \n+  await dbConnect();\n \n-\n   switch(method){\n \n     case \"POST\":\n       try{\n \n-        await dbConnect();\n-\n         const currentUser = await User.find({email: rea.body.email});\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n"
+                },
+                {
+                    "date": 1643018737641,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n async function handler(req, res){\n \n   const {method} = req;\n \n-  await dbConnect();\n+  const {db} = await dbConnect();\n \n   switch(method){\n \n     case \"POST\":\n"
+                },
+                {
+                    "date": 1643018754643,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n   switch(method){\n \n     case \"POST\":\n       try{\n-\n+        console.log(db);\n         const currentUser = await User.find({email: rea.body.email});\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n"
+                },
+                {
+                    "date": 1643018791175,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n-import { Hash } from \"../../../lib\";\n+import { Hash, dbConnect } from \"../../../lib\";\n import User from '../../../models/user.model';\n import Password from '../../../models/password.model';\n-import dbConnect from '../../../lib/mongooseConnect';\n \n \n \n async function handler(req, res){\n"
+                },
+                {
+                    "date": 1643021639499,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,21 +13,22 @@\n   switch(method){\n \n     case \"POST\":\n       try{\n-        console.log(db);\n-        const currentUser = await User.find({email: rea.body.email});\n+\n+        const currentUser = await db.collection('users').find({emai:req.body.email}).toArray();\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n+\n         }\n         const hashPassword = await Hash(req.body.password);\n+        if(!hashPassword){\n+          return res.status(400).json({message:\"invalid password\",status: false});\n+        }\n+        const pass = await db.collection('passwords').insertOne({password: hashPassword});\n+        const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass._id, email: req.body.email});\n \n-        const pass = await Password.create({userPassword:hashPassword});\n-\n-        const user = await new User({name: req.body.name,lastname: req.body.lastname, email: req.body.email, password: pass._id}).save();\n-        pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n-\n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643021711376,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,9 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await db.collection('users').find({emai:req.body.email}).toArray();\n+        console.log(currentUser);\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n"
+                },
+                {
+                    "date": 1643021745888,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = await db.collection('users').find({emai:req.body.email}).toArray();\n+        const currentUser = await db.collection('users').find({emai:req.body.email});\n         console.log(currentUser);\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n"
+                },
+                {
+                    "date": 1643021830048,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await db.collection('users').find({emai:req.body.email});\n-        console.log(currentUser);\n+\n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n@@ -26,9 +26,9 @@\n           return res.status(400).json({message:\"invalid password\",status: false});\n         }\n         const pass = await db.collection('passwords').insertOne({password: hashPassword});\n         const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass._id, email: req.body.email});\n-\n+        await db.connection.close();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e, status:false});\n"
+                },
+                {
+                    "date": 1643023524653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,5 @@\n-import { Hash, dbConnect } from \"../../../lib\";\n-import User from '../../../models/user.model';\n-import Password from '../../../models/password.model';\n+import { Hash} from \"../../../lib\";\n \n \n \n async function handler(req, res){\n"
+                },
+                {
+                    "date": 1643023539814,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { Hash} from \"../../../lib\";\n+import clientPromise from '../../../lib/mongooseConnect';\n \n \n-\n async function handler(req, res){\n \n   const {method} = req;\n \n"
+                },
+                {
+                    "date": 1643023590596,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,11 +4,11 @@\n \n async function handler(req, res){\n \n   const {method} = req;\n+  const client = await clientPromise;\n+  const db = client.db('Time2')\n \n-  const {db} = await dbConnect();\n-\n   switch(method){\n \n     case \"POST\":\n       try{\n"
+                },
+                {
+                    "date": 1643023633362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = await db.collection('users').find({emai:req.body.email});\n+        const currentUser = await db.collection('users').find({}).toArray();\n \n         if(currentUser){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n"
+                },
+                {
+                    "date": 1643023807275,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n       try{\n \n         const currentUser = await db.collection('users').find({}).toArray();\n \n-        if(currentUser){\n+        if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n         const hashPassword = await Hash(req.body.password);\n"
+                },
+                {
+                    "date": 1643023834431,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,8 +23,9 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"invalid password\",status: false});\n         }\n         const pass = await db.collection('passwords').insertOne({password: hashPassword});\n+        console.log(pass);\n         const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass._id, email: req.body.email});\n         await db.connection.close();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n"
+                },
+                {
+                    "date": 1643023875727,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n           return res.status(400).json({message:\"invalid password\",status: false});\n         }\n         const pass = await db.collection('passwords').insertOne({password: hashPassword});\n         console.log(pass);\n-        const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass._id, email: req.body.email});\n+        const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n         await db.connection.close();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643023920310,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n         await db.connection.close();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n-        return res.status(400).json({message:e, status:false});\n+        return res.status(400).json({message:e.message, status:false});\n       }\n \n \n \n"
+                },
+                {
+                    "date": 1643023938506,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,10 +23,9 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"invalid password\",status: false});\n         }\n         const pass = await db.collection('passwords').insertOne({password: hashPassword});\n-        console.log(pass);\n-        const user = await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n+        await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n         await db.connection.close();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643023956032,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = await db.collection('users').find({}).toArray();\n+        const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n \n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n"
+                },
+                {
+                    "date": 1643023963518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n-\n+        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n"
+                },
+                {
+                    "date": 1643024055826,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,17 +5,15 @@\n async function handler(req, res){\n \n   const {method} = req;\n   const client = await clientPromise;\n-  const db = client.db('Time2')\n \n   switch(method){\n \n     case \"POST\":\n       try{\n \n         const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n-        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n"
+                },
+                {
+                    "date": 1643024064571,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n async function handler(req, res){\n \n   const {method} = req;\n   const client = await clientPromise;\n-\n+  console.log(client)l\n   switch(method){\n \n     case \"POST\":\n       try{\n"
+                },
+                {
+                    "date": 1643024070093,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,31 +5,31 @@\n async function handler(req, res){\n \n   const {method} = req;\n   const client = await clientPromise;\n-  console.log(client)l\n+  console.log(client);\n   switch(method){\n \n-    case \"POST\":\n-      try{\n+    // case \"POST\":\n+    //   try{\n \n-        const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n-        if(currentUser.length){\n-          return res.status(400).json({message:\"User already yet\", status: false});\n+    //     const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n+    //     if(currentUser.length){\n+    //       return res.status(400).json({message:\"User already yet\", status: false});\n \n-        }\n-        const hashPassword = await Hash(req.body.password);\n-        if(!hashPassword){\n-          return res.status(400).json({message:\"invalid password\",status: false});\n-        }\n-        const pass = await db.collection('passwords').insertOne({password: hashPassword});\n-        await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n-        await db.connection.close();\n-        return res.status(200).json({message:\"User create\", status: true});\n-      }catch(e){\n+    //     }\n+    //     const hashPassword = await Hash(req.body.password);\n+    //     if(!hashPassword){\n+    //       return res.status(400).json({message:\"invalid password\",status: false});\n+    //     }\n+    //     const pass = await db.collection('passwords').insertOne({password: hashPassword});\n+    //     await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n+    //     await db.connection.close();\n+    //     return res.status(200).json({message:\"User create\", status: true});\n+    //   }catch(e){\n \n-        return res.status(400).json({message:e.message, status:false});\n-      }\n+    //     return res.status(400).json({message:e.message, status:false});\n+    //   }\n \n \n \n \n"
+                },
+                {
+                    "date": 1643024133318,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,35 +1,35 @@\n import { Hash} from \"../../../lib\";\n import clientPromise from '../../../lib/mongooseConnect';\n+import User from '../../../models/user.model';\n \n \n async function handler(req, res){\n \n   const {method} = req;\n   const client = await clientPromise;\n-  console.log(client);\n   switch(method){\n \n-    // case \"POST\":\n-    //   try{\n+    case \"POST\":\n+      try{\n \n-    //     const currentUser = await db.collection('users').find({}).populate('passwords').toArray();\n-    //     if(currentUser.length){\n-    //       return res.status(400).json({message:\"User already yet\", status: false});\n+        const currentUser = a\n+        if(currentUser.length){\n+          return res.status(400).json({message:\"User already yet\", status: false});\n \n-    //     }\n-    //     const hashPassword = await Hash(req.body.password);\n-    //     if(!hashPassword){\n-    //       return res.status(400).json({message:\"invalid password\",status: false});\n-    //     }\n-    //     const pass = await db.collection('passwords').insertOne({password: hashPassword});\n-    //     await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n-    //     await db.connection.close();\n-    //     return res.status(200).json({message:\"User create\", status: true});\n-    //   }catch(e){\n+        }\n+        const hashPassword = await Hash(req.body.password);\n+        if(!hashPassword){\n+          return res.status(400).json({message:\"invalid password\",status: false});\n+        }\n+        const pass = await db.collection('passwords').insertOne({password: hashPassword});\n+        await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n+        await db.connection.close();\n+        return res.status(200).json({message:\"User create\", status: true});\n+      }catch(e){\n \n-    //     return res.status(400).json({message:e.message, status:false});\n-    //   }\n+        return res.status(400).json({message:e.message, status:false});\n+      }\n \n \n \n \n"
+                },
+                {
+                    "date": 1643024156279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,10 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = a\n+        const currentUser = await User.find({email: req.body.email});\n+        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n \n         }\n"
+                },
+                {
+                    "date": 1643024399907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import { Hash} from \"../../../lib\";\n-import clientPromise from '../../../lib/mongooseConnect';\n import User from '../../../models/user.model';\n+import Password from '../../../models/password.model';\n \n \n async function handler(req, res){\n \n"
+                },
+                {
+                    "date": 1643024431141,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,13 +1,12 @@\n import { Hash} from \"../../../lib\";\n import User from '../../../models/user.model';\n import Password from '../../../models/password.model';\n+import connectedDb from '../../../lib/mongooseConnect';\n \n-\n async function handler(req, res){\n \n   const {method} = req;\n-  const client = await clientPromise;\n   switch(method){\n \n     case \"POST\":\n       try{\n"
+                },
+                {
+                    "date": 1643024443025,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,5 +41,5 @@\n }\n \n \n \n-export default handler;\n\\ No newline at end of file\n+export default connectedDb(handler);\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643024474372,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,22 +10,10 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = await User.find({email: req.body.email});\n+        const currentUser = User.find({email:req.body.email});\n         console.log(currentUser);\n-        if(currentUser.length){\n-          return res.status(400).json({message:\"User already yet\", status: false});\n-\n-        }\n-        const hashPassword = await Hash(req.body.password);\n-        if(!hashPassword){\n-          return res.status(400).json({message:\"invalid password\",status: false});\n-        }\n-        const pass = await db.collection('passwords').insertOne({password: hashPassword});\n-        await db.collection('users').insertOne({name: req.body.name, lastname:req.body.lastname, password: pass.insertedId, email: req.body.email});\n-        await db.connection.close();\n-        return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643024498191,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = User.find({email:req.body.email});\n+        const currentUser = User.find({email:req.body.email}).exec()\n         console.log(currentUser);\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643024507050,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = User.find({email:req.body.email}).exec()\n+        const currentUser = await User.find({email:req.body.email}).exec()\n         console.log(currentUser);\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643024515669,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n     case \"POST\":\n       try{\n \n-        const currentUser = await User.find({email:req.body.email}).exec()\n+        const currentUser = await User.find({email:req.body.email});\n         console.log(currentUser);\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643024550924,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,11 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await User.find({email:req.body.email});\n-        console.log(currentUser);\n+        if(currentUser){\n+          return res.status(400).json({message:\"User already yet\", status: false});\n+        }\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643024559019,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await User.find({email:req.body.email});\n-        if(currentUser){\n+        if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643024621514,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,10 @@\n         const currentUser = await User.find({email:req.body.email});\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n+\n+        return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n       }\n"
+                },
+                {
+                    "date": 1643024638592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,9 @@\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n \n+        const hashPassword = await Hash(req.body.password);\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643024697844,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,8 +16,13 @@\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n \n         const hashPassword = await Hash(req.body.password);\n+        if(!hashPassword){\n+          return res.status(400).json({message:\"Invalid password\", status:false});\n+        }\n+        const pass = await Password.create({password: req.body.password});\n+        console.log(pass);\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643025080812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         const hashPassword = await Hash(req.body.password);\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status:false});\n         }\n-        const pass = await Password.create({password: req.body.password});\n+        const pass = await Password.create({userPassword: req.body.password});\n         console.log(pass);\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643025133993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         const hashPassword = await Hash(req.body.password);\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status:false});\n         }\n-        const pass = await Password.create({userPassword: req.body.password});\n+        const pass = await Password.create({userPassword: hashPassword});\n         console.log(pass);\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643025190379,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,10 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status:false});\n         }\n         const pass = await Password.create({userPassword: hashPassword});\n-        console.log(pass);\n+        await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id}).save();\n+        pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643025213291,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status:false});\n         }\n         const pass = await Password.create({userPassword: hashPassword});\n-        await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id}).save();\n+        const user = await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id});\n         pass.save();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n"
+                },
+                {
+                    "date": 1643025224769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,8 +22,9 @@\n         }\n         const pass = await Password.create({userPassword: hashPassword});\n         const user = await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id});\n         pass.save();\n+        user.save();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643025513545,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,10 +21,10 @@\n           return res.status(400).json({message:\"Invalid password\", status:false});\n         }\n         const pass = await Password.create({userPassword: hashPassword});\n         const user = await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id});\n-        pass.save();\n-        user.save();\n+        await pass.save();\n+        await user.save();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n \n         return res.status(400).json({message:e.message, status:false});\n"
+                },
+                {
+                    "date": 1643025533592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,9 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await User.find({email:req.body.email});\n+        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n \n"
+                },
+                {
+                    "date": 1643025579072,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,8 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await User.find({email:req.body.email});\n-        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n \n"
+                }
+            ],
+            "date": 1643007820100,
+            "name": "Commit-0",
+            "content": "import { Hash } from \"../../../lib\";\nimport User from '../../../models/user.model';\nimport Password from '../../../models/password.model';\n\n\n\n\n\nasync function handler(req, res){\n\n  const {method} = req;\n\n\n\n  switch(method){\n\n    case \"POST\":\n      try{\n\n      }catch(e){\n\n        return res.status(400).json({message:e, status:false});\n      }\n\n\n\n\n    default:\n      return res.status(400).json({message:\"Invalid Method\", status: false});\n  }\n\n\n}\n\n\n\nexport default handler;"
+        }
+    ]
+}

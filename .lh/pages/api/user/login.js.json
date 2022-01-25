@@ -1,0 +1,254 @@
+{
+    "sourceFile": "pages/api/user/login.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 59,
+            "patches": [
+                {
+                    "date": 1642659523196,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642659765438,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,15 @@\n import jwt from 'jsonwebtoken';\n import mongoose from 'mongoose';\n+import User from '../../../models/user.model';\n \n \n \n-\n async function handler(req, res){\n \n+  const {email, password} = req.body;\n+\n+\n }\n \n \n \n"
+                },
+                {
+                    "date": 1642660110305,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,10 +6,20 @@\n \n async function handler(req, res){\n \n   const {email, password} = req.body;\n+  const {method} = req;\n \n+  switch(method){\n+    case \"POST\":{\n+      try{\n \n+      }catch(error){\n+        return res.status(400).json({messages:error.messages, status: false});\n+      }\n+    }\n+  }\n+\n }\n \n \n \n"
+                },
+                {
+                    "date": 1642661196655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,5 @@\n import jwt from 'jsonwebtoken';\n-import mongoose from 'mongoose';\n import User from '../../../models/user.model';\n \n \n \n@@ -11,8 +10,12 @@\n \n   switch(method){\n     case \"POST\":{\n       try{\n+        const user = await User.findOne({email});\n+        if(!user){\n+          return res.status(400).json({message:\"Invalid email\", status: false});\n+        }\n \n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n"
+                },
+                {
+                    "date": 1642661239133,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n+import {Compare} from '../../../lib';\n \n \n-\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n"
+                },
+                {
+                    "date": 1642661250282,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n-import {Compare} from '../../../lib';\n+import { Compare } from '../../../lib';\n \n \n async function handler(req, res){\n \n"
+                },
+                {
+                    "date": 1642661601792,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,26 @@\n         const user = await User.findOne({email});\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status: false});\n         }\n+        const comparing  = Compare(password, user.password);\n+        if(!comparing){\n+          return res.status(400).json({message:\"Invalid password\", status: false})\n+        }\n+        const payload = {\n+          id: user._id,\n+          name: user.name\n+        };\n \n+        jwt.sign(payload, process.env.SECRET, {\n+          expiresIn: 10000000\n+        }, (err, token) => {\n+          if(err){\n+            return res.status(400).json({message: err, status: false});\n+          }\n+          return res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n+        });\n+\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1642661669017,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,11 +27,11 @@\n         jwt.sign(payload, process.env.SECRET, {\n           expiresIn: 10000000\n         }, (err, token) => {\n           if(err){\n-            return res.status(400).json({message: err, status: false});\n+             res.status(400).json({message: err, status: false});\n           }\n-          return res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n+           res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n         });\n \n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n"
+                },
+                {
+                    "date": 1642661681557,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,11 +27,11 @@\n         jwt.sign(payload, process.env.SECRET, {\n           expiresIn: 10000000\n         }, (err, token) => {\n           if(err){\n-             res.status(400).json({message: err, status: false});\n+            return res.status(400).json({message: err, status: false});\n           }\n-           res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n+          return res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n         });\n \n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n"
+                },
+                {
+                    "date": 1642661717970,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,8 +36,10 @@\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n+    default:\n+      return res.status(400).json({message: 'Invalid method', status: false});\n   }\n \n }\n \n"
+                },
+                {
+                    "date": 1642662935334,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n         const user = await User.findOne({email});\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status: false});\n         }\n-        const comparing  = Compare(password, user.password);\n+        const comparing  = await Compare(password, user.password);\n         if(!comparing){\n           return res.status(400).json({message:\"Invalid password\", status: false})\n         }\n         const payload = {\n"
+                },
+                {
+                    "date": 1642663017869,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,12 +22,13 @@\n         const payload = {\n           id: user._id,\n           name: user.name\n         };\n-\n-        jwt.sign(payload, process.env.SECRET, {\n+        console.log(payload);\n+        jwt.sign(payload, process.env.SECRET, \n+          {\n           expiresIn: 10000000\n-        }, (err, token) => {\n+          }, (err, token) => {\n           if(err){\n             return res.status(400).json({message: err, status: false});\n           }\n           return res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n"
+                },
+                {
+                    "date": 1642663070479,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,9 @@\n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email});\n+        console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status: false});\n         }\n         const comparing  = await Compare(password, user.password);\n"
+                },
+                {
+                    "date": 1642663082974,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,8 @@\n         const payload = {\n           id: user._id,\n           name: user.name\n         };\n-        console.log(payload);\n         jwt.sign(payload, process.env.SECRET, \n           {\n           expiresIn: 10000000\n           }, (err, token) => {\n"
+                },
+                {
+                    "date": 1642663332943,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,18 +23,13 @@\n         const payload = {\n           id: user._id,\n           name: user.name\n         };\n-        jwt.sign(payload, process.env.SECRET, \n+        const token  = jwt.sign(payload, process.env.SECRET, \n           {\n           expiresIn: 10000000\n-          }, (err, token) => {\n-          if(err){\n-            return res.status(400).json({message: err, status: false});\n-          }\n-          return res.status(200).json({messages: 'OK', token: `Bearer ${token}`, name: user.name, id: user._id });\n-        });\n-\n+          });\n+          console.log(token);\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1642663365533,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,8 +28,9 @@\n           {\n           expiresIn: 10000000\n           });\n           console.log(token);\n+          return res.status(200).json({status: true, token: `Bearer ${token}`})\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1642663422859,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n   switch(method){\n     case \"POST\":{\n       try{\n-        const user = await User.findOne({email});\n+        const user = await User.findOne({email:email});\n         console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status: false});\n         }\n@@ -28,9 +28,9 @@\n           {\n           expiresIn: 10000000\n           });\n           console.log(token);\n-          return res.status(200).json({status: true, token: `Bearer ${token}`})\n+          return res.status(200).json({status: true, token: `Bearer ${token}`});\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1642666819869,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n import { Compare } from '../../../lib';\n+import dbConnect from '../../../lib/mongooseConnect';\n \n-\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n"
+                },
+                {
+                    "date": 1642666827473,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n-\n+  await dbConnect();\n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n"
+                },
+                {
+                    "date": 1642666878475,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,8 @@\n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n-        console.log(user);\n         if(!user){\n           return res.status(400).json({message:\"Invalid email\", status: false});\n         }\n         const comparing  = await Compare(password, user.password);\n@@ -27,10 +26,9 @@\n         const token  = jwt.sign(payload, process.env.SECRET, \n           {\n           expiresIn: 10000000\n           });\n-          console.log(token);\n-          return res.status(200).json({status: true, token: `Bearer ${token}`});\n+          return res.status(200).json({status: true, token: `Bearer ${token}`, name: user.name, id: user._id});\n       }catch(error){\n         return res.status(400).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1642676848930,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n         if(!user){\n-          return res.status(400).json({message:\"Invalid email\", status: false});\n+          return res.status(200).json({message:\"Invalid email\", status: false});\n         }\n         const comparing  = await Compare(password, user.password);\n         if(!comparing){\n           return res.status(400).json({message:\"Invalid password\", status: false})\n"
+                },
+                {
+                    "date": 1642676874703,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n           return res.status(200).json({message:\"Invalid email\", status: false});\n         }\n         const comparing  = await Compare(password, user.password);\n         if(!comparing){\n-          return res.status(400).json({message:\"Invalid password\", status: false})\n+          return res.status(200).json({message:\"Invalid password\", status: false})\n         }\n         const payload = {\n           id: user._id,\n           name: user.name\n@@ -28,13 +28,13 @@\n           expiresIn: 10000000\n           });\n           return res.status(200).json({status: true, token: `Bearer ${token}`, name: user.name, id: user._id});\n       }catch(error){\n-        return res.status(400).json({messages:error.messages, status: false});\n+        return res.status(200).json({messages:error.messages, status: false});\n       }\n     }\n     default:\n-      return res.status(400).json({message: 'Invalid method', status: false});\n+      return res.status(200).json({message: 'Invalid method', status: false});\n   }\n \n }\n \n"
+                },
+                {
+                    "date": 1642685356499,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import jwt from 'jsonwebtoken';\n+import jwt from 'jsonwebtoken/sign';\n import User from '../../../models/user.model';\n import { Compare } from '../../../lib';\n import dbConnect from '../../../lib/mongooseConnect';\n \n"
+                },
+                {
+                    "date": 1642686067532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import jwt from 'jsonwebtoken/sign';\n+import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n import { Compare } from '../../../lib';\n import dbConnect from '../../../lib/mongooseConnect';\n \n"
+                },
+                {
+                    "date": 1643018712384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,13 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n-import { Compare } from '../../../lib';\n-import dbConnect from '../../../lib/mongooseConnect';\n+import { Compare, dbConnect } from '../../../lib';\n \n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n-  await dbConnect();\n+  const {db} = \n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n@@ -26,9 +25,9 @@\n         const token  = jwt.sign(payload, process.env.SECRET, \n           {\n           expiresIn: 10000000\n           });\n-          return res.status(200).json({status: true, token: `Bearer ${token}`, name: user.name, id: user._id});\n+          return res.status(200).json({status: true, token: `Bearer ${token}`, name: user.name, id: user._id, lastname: user.lastname, email: user.email});\n       }catch(error){\n         return res.status(200).json({messages:error.messages, status: false});\n       }\n     }\n"
+                },
+                {
+                    "date": 1643018720067,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n-  const {db} = \n+  const {db} = await dbConnect();\n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n"
+                },
+                {
+                    "date": 1643027948520,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,8 @@\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n-  const {db} = await dbConnect();\n   switch(method){\n     case \"POST\":{\n       try{\n         const user = await User.findOne({email:email});\n"
+                },
+                {
+                    "date": 1643027979506,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n-import { Compare, dbConnect } from '../../../lib';\n+import { Compare} from '../../../lib';\n \n async function handler(req, res){\n \n   const {email, password} = req.body;\n"
+                },
+                {
+                    "date": 1643028006364,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n import { Compare} from '../../../lib';\n-\n+import connectedDb from '../../../lib/mongooseConnect';\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n"
+                },
+                {
+                    "date": 1643028018338,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n import { Compare} from '../../../lib';\n import connectedDb from '../../../lib/mongooseConnect';\n+\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n@@ -37,5 +38,5 @@\n }\n \n \n \n-export default handler;\n+export default connectedDb(handler);\n"
+                },
+                {
+                    "date": 1643028059746,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,31 +7,14 @@\n \n   const {email, password} = req.body;\n   const {method} = req;\n   switch(method){\n-    case \"POST\":{\n+    case \"POST\":\n       try{\n-        const user = await User.findOne({email:email});\n-        if(!user){\n-          return res.status(200).json({message:\"Invalid email\", status: false});\n-        }\n-        const comparing  = await Compare(password, user.password);\n-        if(!comparing){\n-          return res.status(200).json({message:\"Invalid password\", status: false})\n-        }\n-        const payload = {\n-          id: user._id,\n-          name: user.name\n-        };\n-        const token  = jwt.sign(payload, process.env.SECRET, \n-          {\n-          expiresIn: 10000000\n-          });\n-          return res.status(200).json({status: true, token: `Bearer ${token}`, name: user.name, id: user._id, lastname: user.lastname, email: user.email});\n-      }catch(error){\n-        return res.status(200).json({messages:error.messages, status: false});\n+\n+      }catch(e){\n+        return res.status(400).json({message:e.message, status: false});\n       }\n-    }\n     default:\n       return res.status(200).json({message: 'Invalid method', status: false});\n   }\n \n"
+                },
+                {
+                    "date": 1643028185970,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,8 +10,14 @@\n   switch(method){\n     case \"POST\":\n       try{\n \n+        if(!email || !password){\n+          return res.status(400).json({message:\"Invalid email or password\", status: false});\n+        }\n+        const user = await User.find({email: email}).populate('passwords');\n+        return res.status(200).json({message:\"Ok\", status: true, data: user});\n+\n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n     default:\n"
+                },
+                {
+                    "date": 1643028241976,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n-        const user = await User.find({email: email}).populate('passwords');\n+        const user = await User.find({email: email});\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028314603,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,12 @@\n \n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n-        const user = await User.find({email: email});\n+        const user = await User.find({email: email}).populate({\n+          path:\"passwords.password\",\n+          select: 'password'\n+        })\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028516839,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,12 +13,9 @@\n \n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n-        const user = await User.find({email: email}).populate({\n-          path:\"passwords.password\",\n-          select: 'password'\n-        })\n+        const user = await User.find({email: email}).populate('passwords').exec()\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028688719,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n-        const user = await User.find({email: email}).populate('passwords').exec()\n+        const user = await User.findOne({email: email}).populate('passwords').exec();\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028725435,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n \n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n-        const user = await User.findOne({email: email}).populate('passwords').exec();\n+        const user = await User.findOne({email: email}).populate('password').exec();\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028837787,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,14 @@\n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n         const user = await User.findOne({email: email}).populate('password').exec();\n+        const comparePassword = Compare(req.body.password, user.password.userPassword);\n+\n+        if(!comparePassword){\n+          return res.status(400).json({message:\"Invalid password\", status: false});\n+        }\n+\n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643028881254,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n         const user = await User.findOne({email: email}).populate('password').exec();\n         const comparePassword = Compare(req.body.password, user.password.userPassword);\n-\n+        console.log(comparePassword);\n         if(!comparePassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n \n"
+                },
+                {
+                    "date": 1643028889144,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n         if(!email || !password){\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n         const user = await User.findOne({email: email}).populate('password').exec();\n-        const comparePassword = Compare(req.body.password, user.password.userPassword);\n+        const comparePassword = await Compare(req.body.password, user.password.userPassword);\n         console.log(comparePassword);\n         if(!comparePassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n"
+                },
+                {
+                    "date": 1643028917306,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n         }\n         const user = await User.findOne({email: email}).populate('password').exec();\n         const comparePassword = await Compare(req.body.password, user.password.userPassword);\n         console.log(comparePassword);\n-        if(!comparePassword){\n+        if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n \n         return res.status(200).json({message:\"Ok\", status: true, data: user});\n"
+                },
+                {
+                    "date": 1643028941195,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,8 @@\n           return res.status(400).json({message:\"Invalid email or password\", status: false});\n         }\n         const user = await User.findOne({email: email}).populate('password').exec();\n         const comparePassword = await Compare(req.body.password, user.password.userPassword);\n-        console.log(comparePassword);\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n \n"
+                },
+                {
+                    "date": 1643028993736,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n \n-        return res.status(200).json({message:\"Ok\", status: true, data: user});\n+        return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643029085474,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n         const comparePassword = await Compare(req.body.password, user.password.userPassword);\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-\n+        const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029099757,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,10 +18,10 @@\n         const comparePassword = await Compare(req.body.password, user.password.userPassword);\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-        const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        return res.status(200).json({message:\"Ok\", status: true, user: user});\n+        const token = await jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n+        return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643029131653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,10 @@\n         const comparePassword = await Compare(req.body.password, user.password.userPassword);\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-        const token = await jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n+        const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n+        res.setHeader('token', token)l\n         return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029164422,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,10 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setHeader('token', token)l\n-        return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n+        res.setHeader('authorization', `Bearer ${token}`);\n+        return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643029202907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setHeader('authorization', `Bearer ${token}`);\n+        res.setCookies('authorization', `Bearer ${token}`);\n         return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029210811,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setCookies('authorization', `Bearer ${token}`);\n+        res.setCookie('authorization', `Bearer ${token}`);\n         return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029439320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,10 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setCookie('authorization', `Bearer ${token}`);\n+        // res.setCookie('authorization', `Bearer ${token}`);\n+        console.log(res);\n         return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029470655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         // res.setCookie('authorization', `Bearer ${token}`);\n-        console.log(res);\n+        console.log(res.cookies);\n         return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029560621,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         // res.setCookie('authorization', `Bearer ${token}`);\n         console.log(res.cookies);\n-        return res.status(200).json({message:\"Ok\", status: true, user: user});\n+        return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643029625290,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         // res.setCookie('authorization', `Bearer ${token}`);\n-        console.log(res.cookies);\n+        console.log(req);\n         return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029662247,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,9 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        // res.setCookie('authorization', `Bearer ${token}`);\n-        console.log(req);\n+        res.setHeaders('authorization', `Bearer ${token}`);\n         return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029671340,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setHeaders('authorization', `Bearer ${token}`);\n+        res.setHeader('authorization', `Bearer ${token}`);\n         return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643029720458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         res.setHeader('authorization', `Bearer ${token}`);\n-        return res.status(200).json({message:\"Ok\", status: true, user: user, token: token});\n+        return res.status(200).json({message:\"Ok\", status: true, user: user});\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643030394983,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n import { Compare} from '../../../lib';\n import connectedDb from '../../../lib/mongooseConnect';\n-\n+import cookies from '../../../lib/cookies';\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n"
+                },
+                {
+                    "date": 1643030405005,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,5 +33,5 @@\n }\n \n \n \n-export default connectedDb(handler);\n+export default connectedDb(cookies(handler));\n"
+                },
+                {
+                    "date": 1643030484761,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,11 @@\n         if(comparePassword !== true){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.setHeader('authorization', `Bearer ${token}`);\n-        return res.status(200).json({message:\"Ok\", status: true, user: user});\n+        res.cookie(\"token\", token);\n+        // return res.status(200).json({message:\"Ok\", status: true, user: user});\n+        return res.status(200).end(res.getHeader('Set-Cookie'));\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n       }\n"
+                },
+                {
+                    "date": 1643030515914,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,8 @@\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         res.cookie(\"token\", token);\n-        // return res.status(200).json({message:\"Ok\", status: true, user: user});\n         return res.status(200).end(res.getHeader('Set-Cookie'));\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                }
+            ],
+            "date": 1642659523196,
+            "name": "Commit-0",
+            "content": "import jwt from 'jsonwebtoken';\nimport mongoose from 'mongoose';\n\n\n\n\nasync function handler(req, res){\n\n}\n\n\n\nexport default handler;\n"
+        }
+    ]
+}

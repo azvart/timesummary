@@ -1,0 +1,94 @@
+{
+    "sourceFile": "pages/[id]/index.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 19,
+            "patches": [
+                {
+                    "date": 1642667809235,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642678078665,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,5 +17,11 @@\n Messages.getLayout = (page) => (\n   <Layout>\n     {page}\n   </Layout>\n-)\n\\ No newline at end of file\n+)\n+\n+export async function getServerSideProps(ctx){\n+  console.log(ctx);\n+}\n+\n+export default Messages;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1642678148635,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,7 +21,10 @@\n )\n \n export async function getServerSideProps(ctx){\n   console.log(ctx);\n+  return {\n+    props:{}\n+  }\n }\n \n export default Messages;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1642678168164,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n   </Layout>\n )\n \n export async function getServerSideProps(ctx){\n-  console.log(ctx);\n+  console.log(ctx.query)\n   return {\n     props:{}\n   }\n }\n"
+                },
+                {
+                    "date": 1642678188969,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n   </Layout>\n )\n \n export async function getServerSideProps(ctx){\n-  console.log(ctx.query)\n+  const {id} = ctx.query;\n   return {\n     props:{}\n   }\n }\n"
+                },
+                {
+                    "date": 1643029762554,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,10 @@\n import Layout from '../../Layout/index';\n+import {useAuth} from '../../hooks/useAuth';\n \n \n \n-\n-\n const Messages =() => {\n-\n   return (\n     <div>\n       <h2>Hello</h2>\n     </div>\n@@ -19,12 +17,16 @@\n     {page}\n   </Layout>\n )\n \n+\n export async function getServerSideProps(ctx){\n-  const {id} = ctx.query;\n+\n   return {\n-    props:{}\n+    props:{\n+      \n+    }\n   }\n }\n \n+\n export default Messages;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643029775603,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import Layout from '../../Layout/index';\n-import {useAuth} from '../../hooks/useAuth';\n+import { useAuth } from '../../hooks/useAuth';\n \n \n \n const Messages =() => {\n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-\n+  const auth = useAuth();\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643029854194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,9 @@\n \n \n export async function getServerSideProps(ctx){\n   const auth = useAuth();\n+  console.log(ctx.req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643029866518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,8 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-  const auth = useAuth();\n-  console.log(ctx.req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643030647142,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,8 +19,9 @@\n )\n \n \n export async function getServerSideProps(ctx){\n+  console.log(ctx);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643030712301,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-  console.log(ctx);\n+  console.log(ctx.req.cookie);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643030746635,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-  console.log(ctx.req.cookie);\n+  console.log(ctx.req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643031279982,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,8 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-  console.log(ctx.req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032188793,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,8 +19,9 @@\n )\n \n \n export async function getServerSideProps(ctx){\n+  console.log(ctx.res.getHeader('Set-Cookie'));\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032250006,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,8 @@\n )\n \n \n export async function getServerSideProps(ctx){\n-  console.log(ctx.res.getHeader('Set-Cookie'));\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032279481,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,10 @@\n   </Layout>\n )\n \n \n-export async function getServerSideProps(ctx){\n+export async function getServerSideProps({req, res}){\n+  console.log(req.getHeader());\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032289527,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps({req, res}){\n-  console.log(req.getHeader());\n+  console.log(req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032385617,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps({req, res}){\n-  console.log(req);\n+  console.log(req.cookie);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032394465,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n )\n \n \n export async function getServerSideProps({req, res}){\n-  console.log(req.cookie);\n+  console.log(req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643032449164,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,8 @@\n )\n \n \n export async function getServerSideProps({req, res}){\n-  console.log(req);\n   return {\n     props:{\n       \n     }\n"
+                }
+            ],
+            "date": 1642667809235,
+            "name": "Commit-0",
+            "content": "import Layout from '../../Layout/index';\n\n\n\n\n\nconst Messages =() => {\n\n  return (\n    <div>\n      <h2>Hello</h2>\n    </div>\n  )\n}\n\n\nMessages.getLayout = (page) => (\n  <Layout>\n    {page}\n  </Layout>\n)"
+        }
+    ]
+}

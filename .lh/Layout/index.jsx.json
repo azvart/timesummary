@@ -1,0 +1,82 @@
+{
+    "sourceFile": "Layout/index.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 16,
+            "patches": [
+                {
+                    "date": 1642667245663,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642667255233,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,11 @@\n \n \n const Layout = ({children}) => {\n   return (\n-\n+    <div>\n+      \n+    </div>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1642667262437,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \n const Layout = ({children}) => {\n   return (\n     <div>\n-      \n+      {children}\n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1642667335105,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,19 @@\n+import Footer from \"components/Footer\";\n+import Navbar from \"components/Navbar\";\n+import Sidebar from \"components/Sidebar\";\n \n-\n-\n-\n-\n const Layout = ({children}) => {\n   return (\n-    <div>\n+    <>\n+      <Navbar />\n+    <div className=\"wrapper\">\n+      <Sidebar />\n       {children}\n     </div>\n+\n+    <Footer />\n+    </>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1642667346421,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,14 +5,14 @@\n const Layout = ({children}) => {\n   return (\n     <>\n       <Navbar />\n-    <div className=\"wrapper\">\n-      <Sidebar />\n-      {children}\n-    </div>\n+        <div className=\"wrapper\">\n+          <Sidebar />\n+          {children}\n+        </div>\n \n-    <Footer />\n+      <Footer />\n     </>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1642682872047,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,19 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n import Sidebar from \"components/Sidebar\";\n+import {useEffect} from 'react';\n+import {useRouter} from 'next/router';\n+import { router } from \"json-server\";\n \n const Layout = ({children}) => {\n+  useEffect(() => {\n+    const token = sessionStorage.getItem('token');\n+    const id = sessionStorage.getItem('id');\n+    if(!id && !token){\n+      router.push('/');\n+    }\n+  },[router]);\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n"
+                },
+                {
+                    "date": 1642682890693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,11 @@\n import Navbar from \"components/Navbar\";\n import Sidebar from \"components/Sidebar\";\n import {useEffect} from 'react';\n import {useRouter} from 'next/router';\n-import { router } from \"json-server\";\n \n const Layout = ({children}) => {\n+  const router = useRouter();\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     const id = sessionStorage.getItem('id');\n     if(!id && !token){\n"
+                },
+                {
+                    "date": 1642682907194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     const id = sessionStorage.getItem('id');\n     if(!id && !token){\n       router.push('/');\n     }\n-  },[router]);\n+  },[sessionStorage]);\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n"
+                },
+                {
+                    "date": 1642682924652,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     const id = sessionStorage.getItem('id');\n     if(!id && !token){\n-      router.push('/');\n+     return  router.push('/');\n     }\n   },[sessionStorage]);\n   return (\n     <>\n"
+                },
+                {
+                    "date": 1642682979600,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,12 @@\n import {useRouter} from 'next/router';\n \n const Layout = ({children}) => {\n   const router = useRouter();\n+  const [credentials, setCredentials] = useState({\n+    token: sessionStorage.getItem('token'),\n+    id: sessionStorage.getItem('id')\n+  })\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     const id = sessionStorage.getItem('id');\n     if(!id && !token){\n"
+                },
+                {
+                    "date": 1642682986640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n import Sidebar from \"components/Sidebar\";\n-import {useEffect} from 'react';\n+import {useEffect, useState} from 'react';\n import {useRouter} from 'next/router';\n \n const Layout = ({children}) => {\n   const router = useRouter();\n"
+                },
+                {
+                    "date": 1642683016487,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,12 +12,12 @@\n   })\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     const id = sessionStorage.getItem('id');\n-    if(!id && !token){\n-     return  router.push('/');\n-    }\n-  },[sessionStorage]);\n+   if(!credentials.token && !credentials.id){\n+     return router.push('/');\n+   }\n+  },[credentials]);\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n"
+                },
+                {
+                    "date": 1642683077492,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,14 +6,12 @@\n \n const Layout = ({children}) => {\n   const router = useRouter();\n   const [credentials, setCredentials] = useState({\n-    token: sessionStorage.getItem('token'),\n-    id: sessionStorage.getItem('id')\n+    token: sessionStorage.getItem('token') || '',\n+    id: sessionStorage.getItem('id') || ''\n   })\n   useEffect(() => {\n-    const token = sessionStorage.getItem('token');\n-    const id = sessionStorage.getItem('id');\n    if(!credentials.token && !credentials.id){\n      return router.push('/');\n    }\n   },[credentials]);\n"
+                },
+                {
+                    "date": 1642683090357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     id: sessionStorage.getItem('id') || ''\n   })\n   useEffect(() => {\n    if(!credentials.token && !credentials.id){\n-     return router.push('/');\n+     return router.replace('/');\n    }\n   },[credentials]);\n   return (\n     <>\n"
+                },
+                {
+                    "date": 1642683750003,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,18 +4,8 @@\n import {useEffect, useState} from 'react';\n import {useRouter} from 'next/router';\n \n const Layout = ({children}) => {\n-  const router = useRouter();\n-  const [credentials, setCredentials] = useState({\n-    token: sessionStorage.getItem('token') || '',\n-    id: sessionStorage.getItem('id') || ''\n-  })\n-  useEffect(() => {\n-   if(!credentials.token && !credentials.id){\n-     return router.replace('/');\n-   }\n-  },[credentials]);\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n"
+                },
+                {
+                    "date": 1642684140009,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,7 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n import Sidebar from \"components/Sidebar\";\n-import {useEffect, useState} from 'react';\n-import {useRouter} from 'next/router';\n-\n const Layout = ({children}) => {\n   return (\n     <>\n       <Navbar />\n"
+                },
+                {
+                    "date": 1642685233232,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,9 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n-import Sidebar from \"components/Sidebar\";\n+// import Sidebar from \"components/Sidebar\";\n+import Sidebar from 'components/Sidebar';\n+\n const Layout = ({children}) => {\n   return (\n     <>\n       <Navbar />\n"
+                }
+            ],
+            "date": 1642667245663,
+            "name": "Commit-0",
+            "content": "\n\n\n\n\nconst Layout = ({children}) => {\n  return (\n\n  )\n}\n\n\nexport default Layout;"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "sourceFile": "pages/user/employees.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1642669304011,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642669370255,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,20 @@\n-import Layout from '../../Layout/index';\n\\ No newline at end of file\n+import Layout from '../../Layout/index';\n+\n+\n+\n+\n+\n+const Employees = () => {\n+  return (\n+    <div>\n+\n+    </div>\n+  )\n+}\n+\n+\n+Employees.getLayout = (page) => (\n+  <Layout>\n+    {pgae}\n+  </Layout>\n+)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1642669386184,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,7 +14,10 @@\n \n \n Employees.getLayout = (page) => (\n   <Layout>\n-    {pgae}\n+    {page}\n   </Layout>\n\\ No newline at end of file\n-)\n+)\n+\n+\n+export default Employees;\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1642669304011,
+            "name": "Commit-0",
+            "content": "import Layout from '../../Layout/index';"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "pages/index.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1642671110469,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1642671110469,
+            "name": "Commit-0",
+            "content": "import Link from 'next/link';\nimport {useRouter} from 'next/router';\nimport {useEffect} from 'react';\nfunction Home() {\n  return (\n    <div>\n      <h1>Home page</h1>\n      <Link href=\"/blog\">\n        <a>Blog</a>\n      </Link>\n      <Link href=\"/product\">\n        <a>Products</a>\n      </Link>\n      <Link href=\"/users\">\n        <a>Users</a>\n      </Link>\n      <Link href=\"/posts\">\n        <a>Posts</a>\n      </Link>\n    </div>\n    \n  )\n}\n\nexport default Home;"
+        }
+    ]
+}

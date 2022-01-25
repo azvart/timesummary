@@ -1,0 +1,302 @@
+{
+    "sourceFile": "pages/index.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 71,
+            "patches": [
+                {
+                    "date": 1642671170808,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642671243104,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n \n \n const Home = () => {\n   return (\n-    <div>\n-\n+    <div className='login-container'>\n+        \n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1642671799570,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,18 @@\n \n const Home = () => {\n   return (\n     <div className='login-container'>\n-        \n+        <div className='login-form'>\n+            <div>\n+              <label htmlFor=\"\"></label>\n+              <input type=\"text\" />\n+            </div>\n+            <div>\n+              <label htmlFor=\"\">\n+              </label><input type=\"text\" />\n+            </div>\n+        </div>\n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1642673077395,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import Link from 'next/link';\n import {useRouter} from 'next/router';\n import {useEffect} from 'react';\n+import Image from 'next/image';\n \n-\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n"
+                },
+                {
+                    "date": 1642673107376,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,8 +6,9 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n+            <Image width={320} height={50} alt='' src='logo.png' />\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673113016,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n-            <Image width={320} height={50} alt='' src='logo.png' />\n+            <Image width={320} height={50} alt='' src='/logo.png' />\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673125156,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n-            <Image width={320} height={50} alt='' src='/logo.png' />\n+            <Image width={300} height={50} alt='' src='/logo.png' />\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673140552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n-            <Image width={300} height={50} alt='' src='/logo.png' />\n+            <Image width={100} height={50} alt='' src='/logo.png' quality={100} />\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673177984,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n-            <Image width={100} height={50} alt='' src='/logo.png' quality={100} />\n+            <Image width={50} height={50} alt='' src='/logo.png' quality={100} />\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673220885,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,11 @@\n const Home = () => {\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n+            <div>\n             <Image width={50} height={50} alt='' src='/logo.png' quality={100} />\n+            </div>\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n             </div>\n"
+                },
+                {
+                    "date": 1642673228304,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n             <div>\n-            <Image width={50} height={50} alt='' src='/logo.png' quality={100} />\n+            <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n               <label htmlFor=\"\"></label>\n               <input type=\"text\" />\n"
+                },
+                {
+                    "date": 1642673413032,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,14 +10,14 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n-              <label htmlFor=\"\"></label>\n+              <label></label>\n               <input type=\"text\" />\n             </div>\n             <div>\n-              <label htmlFor=\"\">\n-              </label><input type=\"text\" />\n+              <label></label>\n+              <input type=\"text\" />\n             </div>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642673423320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,13 +10,13 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n-              <label></label>\n+              <label>Email</label>\n               <input type=\"text\" />\n             </div>\n             <div>\n-              <label></label>\n+              <label>Password</label>\n               <input type=\"text\" />\n             </div>\n         </div>\n     </div>\n"
+                },
+                {
+                    "date": 1642673448108,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,13 +11,13 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n               <label>Email</label>\n-              <input type=\"text\" />\n+              <input type=\"text\" name='email' />\n             </div>\n             <div>\n               <label>Password</label>\n-              <input type=\"text\" />\n+              <input type=\"password\" name='password' />\n             </div>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642673457327,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n-              <label>Email</label>\n+              <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' />\n             </div>\n             <div>\n               <label>Password</label>\n"
+                },
+                {
+                    "date": 1642673466668,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n               <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' />\n             </div>\n             <div>\n-              <label>Password</label>\n+              <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' />\n             </div>\n         </div>\n     </div>\n"
+                },
+                {
+                    "date": 1642673477638,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,13 +11,13 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <div>\n               <label htmlFor='email'>Email</label>\n-              <input type=\"text\" name='email' />\n+              <input type=\"text\" name='email' required />\n             </div>\n             <div>\n               <label htmlFor='password'>Password</label>\n-              <input type=\"password\" name='password' />\n+              <input type=\"password\" name='password' required />\n             </div>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642673492383,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,16 +9,18 @@\n         <div className='login-form'>\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n+            <form>\n             <div>\n               <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' required />\n             </div>\n             <div>\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' required />\n             </div>\n+            </form>\n         </div>\n     </div>\n   )\n }\n"
+                },
+                {
+                    "date": 1642673505129,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,8 +18,11 @@\n             <div>\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' required />\n             </div>\n+            <div>\n+              <input type=\"submit\" />\n+            </div>\n             </form>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642673517009,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' required />\n             </div>\n             <div>\n-              <input type=\"submit\" />\n+              <input type=\"submit\" value=\"Login\" />\n             </div>\n             </form>\n         </div>\n     </div>\n"
+                },
+                {
+                    "date": 1642673535759,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n         <div className='login-form'>\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n-            <form>\n+            <form onSubmit={handleSubmit}>\n             <div>\n               <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' required />\n             </div>\n"
+                },
+                {
+                    "date": 1642673560019,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,13 @@\n import {useEffect} from 'react';\n import Image from 'next/image';\n \n const Home = () => {\n+\n+  const handleSubmit = (event) => {\n+    event.preventDefault();\n+    \n+  }\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n             <div>\n"
+                },
+                {
+                    "date": 1642673615621,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\n \n   const handleSubmit = (event) => {\n     event.preventDefault();\n-    \n+\n   }\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n@@ -24,9 +24,9 @@\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' required />\n             </div>\n             <div>\n-              <input type=\"submit\" value=\"Login\" />\n+              <button type='submit'>Login</button>\n             </div>\n             </form>\n         </div>\n     </div>\n"
+                },
+                {
+                    "date": 1642674397788,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import Link from 'next/link';\n import {useRouter} from 'next/router';\n-import {useEffect} from 'react';\n+import {useEffect, useState} from 'react';\n import Image from 'next/image';\n \n const Home = () => {\n-\n+  const [form, setForm] = useState({});\n   const handleSubmit = (event) => {\n     event.preventDefault();\n \n   }\n"
+                },
+                {
+                    "date": 1642674446451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,8 +8,12 @@\n   const handleSubmit = (event) => {\n     event.preventDefault();\n \n   }\n+  const handleChange = (event) => {\n+    const {name, value} = event.target;\n+    setForm({...form, [name]:value})\n+  }\n   return (\n     <div className='login-container'>\n         <div className='login-form'>\n             <div>\n@@ -17,9 +21,9 @@\n             </div>\n             <form onSubmit={handleSubmit}>\n             <div>\n               <label htmlFor='email'>Email</label>\n-              <input type=\"text\" name='email' required />\n+              <input type=\"text\" name='email' onChange={handleChange} required />\n             </div>\n             <div>\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' required />\n"
+                },
+                {
+                    "date": 1642674454686,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n               <input type=\"text\" name='email' onChange={handleChange} required />\n             </div>\n             <div>\n               <label htmlFor='password'>Password</label>\n-              <input type=\"password\" name='password' required />\n+              <input type=\"password\" name='password' onChange={handleChange} required />\n             </div>\n             <div>\n               <button type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642675884217,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import Link from 'next/link';\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n-\n+import axios from 'axios';\n const Home = () => {\n   const [form, setForm] = useState({});\n   const handleSubmit = (event) => {\n     event.preventDefault();\n"
+                },
+                {
+                    "date": 1642675976167,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,13 +2,18 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n import axios from 'axios';\n+\n const Home = () => {\n   const [form, setForm] = useState({});\n-  const handleSubmit = (event) => {\n+  const handleSubmit = async (event) => {\n     event.preventDefault();\n-\n+    const {data} = axios({\n+      method:'post',\n+      url:\"http://localhost:3000/api/user/login\",\n+      data:form\n+    })\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642676070077,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,16 +4,25 @@\n import Image from 'next/image';\n import axios from 'axios';\n \n const Home = () => {\n+  const router = useRouter();\n   const [form, setForm] = useState({});\n+  const [res,setRes] = useState();\n+  const [error, setError] = useState('');\n   const handleSubmit = async (event) => {\n     event.preventDefault();\n-    const {data} = axios({\n+    const {data} = await axios({\n       method:'post',\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n+    setRes(data);\n+    if(res.data.status){\n+      router.push('/user')\n+    }else{\n+      setError(data.message);\n+    }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642676109640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,13 +16,13 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n     setRes(data);\n-    if(res.data.status){\n-      router.push('/user')\n-    }else{\n-      setError(data.message);\n-    }\n+    // if(res.data.status){\n+    //   router.push('/user')\n+    // }else{\n+    //   setError(data.message);\n+    // }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642676139099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,13 +16,13 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n     setRes(data);\n-    // if(res.data.status){\n-    //   router.push('/user')\n-    // }else{\n-    //   setError(data.message);\n-    // }\n+    if(res.status){\n+      router.push('/user')\n+    }else{\n+      setError(data.message);\n+    }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642676164598,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n     setRes(data);\n-    if(res.status){\n+    if(res.status && res){\n       router.push('/user')\n     }else{\n       setError(data.message);\n     }\n"
+                },
+                {
+                    "date": 1642676250415,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,4 @@\n-import Link from 'next/link';\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n import axios from 'axios';\n"
+                },
+                {
+                    "date": 1642676814291,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \n const Home = () => {\n   const router = useRouter();\n   const [form, setForm] = useState({});\n-  const [res,setRes] = useState();\n+  const [res,setRes] = useState({});\n   const [error, setError] = useState('');\n   const handleSubmit = async (event) => {\n     event.preventDefault();\n     const {data} = await axios({\n"
+                },
+                {
+                    "date": 1642676893881,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,8 +43,9 @@\n             </div>\n             <div>\n               <button type='submit'>Login</button>\n             </div>\n+            {error}\n             </form>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642676903814,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,11 @@\n             </div>\n             <div>\n               <button type='submit'>Login</button>\n             </div>\n-            {error}\n+            <span>\n+              {error}\n+            </span>\n             </form>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642676928509,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' onChange={handleChange} required />\n             </div>\n             <div>\n-              <button type='submit'>Login</button>\n+              <button className='login-btn' type='submit'>Login</button>\n             </div>\n             <span>\n               {error}\n             </span>\n"
+                },
+                {
+                    "date": 1642677146129,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n             <div>\n               <label htmlFor='password'>Password</label>\n               <input type=\"password\" name='password' onChange={handleChange} required />\n             </div>\n-            <div>\n+            <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n             <span>\n               {error}\n"
+                },
+                {
+                    "date": 1642677252535,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n-            <span>\n+            <span className='error'>\n               {error}\n             </span>\n             </form>\n         </div>\n"
+                },
+                {
+                    "date": 1642677416448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         <div className='login-form'>\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n-            <form onSubmit={handleSubmit}>\n+            <form className='form' onSubmit={handleSubmit}>\n             <div>\n               <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' onChange={handleChange} required />\n             </div>\n"
+                },
+                {
+                    "date": 1642677539622,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,11 +43,11 @@\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n-            <span className='error'>\n+           {error && (<span className='error'>\n               {error}\n-            </span>\n+            </span>)}\n             </form>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1642677973766,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,14 +14,14 @@\n       method:'post',\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n-    setRes(data);\n-    if(res.status && res){\n-      router.push('/user')\n-    }else{\n-      setError(data.message);\n-    }\n+    // setRes(data);\n+    // if(res.status && res){\n+    //   router.push(`/${}`)\n+    // }else{\n+    //   setError(data.message);\n+    // }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642677980182,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n       method:'post',\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n-    // setRes(data);\n+    setRes(data);\n     // if(res.status && res){\n     //   router.push(`/${}`)\n     // }else{\n     //   setError(data.message);\n"
+                },
+                {
+                    "date": 1642678004805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,13 +15,13 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     })\n     setRes(data);\n-    // if(res.status && res){\n-    //   router.push(`/${}`)\n-    // }else{\n-    //   setError(data.message);\n-    // }\n+    if(res.status && res){\n+      router.push(`/${res.id}`)\n+    }else{\n+      setError(data.message);\n+    }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678087947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n       data:form\n     })\n     setRes(data);\n     if(res.status && res){\n-      router.push(`/${res.id}`)\n+      router.push(`/?id=${res.id}`)\n     }else{\n       setError(data.message);\n     }\n   }\n"
+                },
+                {
+                    "date": 1642678098582,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n       data:form\n     })\n     setRes(data);\n     if(res.status && res){\n-      router.push(`/?id=${res.id}`)\n+      router.push(`/${res.id}`)\n     }else{\n       setError(data.message);\n     }\n   }\n"
+                },
+                {
+                    "date": 1642678220178,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,8 +16,9 @@\n       data:form\n     })\n     setRes(data);\n     if(res.status && res){\n+      localStorage.setItem('token', JSON.stringify(res.token));\n       router.push(`/${res.id}`)\n     }else{\n       setError(data.message);\n     }\n"
+                },
+                {
+                    "date": 1642678310344,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,16 +7,18 @@\n   const router = useRouter();\n   const [form, setForm] = useState({});\n   const [res,setRes] = useState({});\n   const [error, setError] = useState('');\n-  const handleSubmit = async (event) => {\n+  const handleSubmit = (event) => {\n     event.preventDefault();\n-    const {data} = await axios({\n+     axios({\n       method:'post',\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n+    }).then(({data}) => {\n+      setRes(data);\n     })\n-    setRes(data);\n+\n     if(res.status && res){\n       localStorage.setItem('token', JSON.stringify(res.token));\n       router.push(`/${res.id}`)\n     }else{\n"
+                },
+                {
+                    "date": 1642678360462,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,9 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     }).then(({data}) => {\n       setRes(data);\n+      setError(data.message);\n     })\n \n     if(res.status && res){\n       localStorage.setItem('token', JSON.stringify(res.token));\n"
+                },
+                {
+                    "date": 1642678380776,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,12 +19,10 @@\n       setError(data.message);\n     })\n \n     if(res.status && res){\n-      localStorage.setItem('token', JSON.stringify(res.token));\n+      sessionStorage.setItem('token', JSON.stringify(res.token));\n       router.push(`/${res.id}`)\n-    }else{\n-      setError(data.message);\n     }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n"
+                },
+                {
+                    "date": 1642678499752,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,13 +17,8 @@\n     }).then(({data}) => {\n       setRes(data);\n       setError(data.message);\n     })\n-\n-    if(res.status && res){\n-      sessionStorage.setItem('token', JSON.stringify(res.token));\n-      router.push(`/${res.id}`)\n-    }\n   }\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678579972,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,11 +15,18 @@\n       url:\"http://localhost:3000/api/user/login\",\n       data:form\n     }).then(({data}) => {\n       setRes(data);\n+      if(data.status){\n+        sessionStorage.setItem('token',data.token);\n+      }else{\n       setError(data.message);\n+      }\n     })\n   }\n+  useEffect(() => {\n+    if()\n+  },[res]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n"
+                },
+                {
+                    "date": 1642678585969,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,8 @@\n       }\n     })\n   }\n   useEffect(() => {\n-    if()\n   },[res]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678624409,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,8 +23,10 @@\n       }\n     })\n   }\n   useEffect(() => {\n+    const token = sessionStorage.getItem('token');\n+    console.log(token)l\n   },[res]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678632395,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n     })\n   }\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n-    console.log(token)l\n+    \n   },[res]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678656264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n   }\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     \n-  },[res]);\n+  },[]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n"
+                },
+                {
+                    "date": 1642678667631,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n     })\n   }\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n-    \n+    console.log(token);\n   },[]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678748653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,16 +17,20 @@\n     }).then(({data}) => {\n       setRes(data);\n       if(data.status){\n         sessionStorage.setItem('token',data.token);\n+        sessionStorage.setItem('id', data.id);\n       }else{\n       setError(data.message);\n       }\n     })\n   }\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n-    console.log(token);\n+    const id = sessionStorage.getItem('id');\n+    if(token && id){\n+      router.push(`${id}`);\n+    }\n   },[]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n"
+                },
+                {
+                    "date": 1642678770741,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n     const id = sessionStorage.getItem('id');\n     if(token && id){\n       router.push(`${id}`);\n     }\n-  },[]);\n+  },[router, res]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n"
+                },
+                {
+                    "date": 1642685611078,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n import axios from 'axios';\n+import { TextInput } from 'components/TextInput';\n \n const Home = () => {\n   const router = useRouter();\n   const [form, setForm] = useState({});\n"
+                },
+                {
+                    "date": 1642685633853,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,12 +46,9 @@\n             <div>\n               <label htmlFor='email'>Email</label>\n               <input type=\"text\" name='email' onChange={handleChange} required />\n             </div>\n-            <div>\n-              <label htmlFor='password'>Password</label>\n-              <input type=\"password\" name='password' onChange={handleChange} required />\n-            </div>\n+            <TextInput />\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n            {error && (<span className='error'>\n"
+                },
+                {
+                    "date": 1642685647955,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,13 +42,10 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n-            <div>\n-              <label htmlFor='email'>Email</label>\n-              <input type=\"text\" name='email' onChange={handleChange} required />\n-            </div>\n             <TextInput />\n+            <TextInput />\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n            {error && (<span className='error'>\n"
+                },
+                {
+                    "date": 1642685657591,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,9 +42,11 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n+              <div>\n             <TextInput />\n+            </div>\n             <TextInput />\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642685666711,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,12 +42,14 @@\n             <div>\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n-              <div>\n+            <div>\n             <TextInput />\n             </div>\n+            <div>\n             <TextInput />\n+            </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n            {error && (<span className='error'>\n"
+                },
+                {
+                    "date": 1642685683506,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,12 +43,12 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n             <div>\n-            <TextInput />\n+            <TextInput name='email' />\n             </div>\n             <div>\n-            <TextInput />\n+            <TextInput name='password' />\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642685697464,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n             <div>\n-            <TextInput name='email' />\n+            <TextInput name='email' placeholder='email' />\n             </div>\n             <div>\n             <TextInput name='password' />\n             </div>\n"
+                },
+                {
+                    "date": 1642685708535,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n             <div>\n-            <TextInput name='email' placeholder='email' />\n+            <TextInput name='email' label='Email' />\n             </div>\n             <div>\n             <TextInput name='password' />\n             </div>\n"
+                },
+                {
+                    "date": 1642685724988,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,9 @@\n             <div>\n             <TextInput name='email' label='Email' />\n             </div>\n             <div>\n-            <TextInput name='password' />\n+            <TextInput name='password' label='Password' />\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642685786503,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,12 +43,12 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n             <div>\n-            <TextInput name='email' label='Email' />\n+            <TextInput name='email' label='Email' onChange={handleChange} />\n             </div>\n             <div>\n-            <TextInput name='password' label='Password' />\n+            <TextInput name='password' label='Password' onChange={handleChange} />\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642685805523,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,9 @@\n             <div>\n             <TextInput name='email' label='Email' onChange={handleChange} />\n             </div>\n             <div>\n-            <TextInput name='password' label='Password' onChange={handleChange} />\n+            <TextInput name='password' label='Password' onChange={handleChange} type='password' />\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n"
+                },
+                {
+                    "date": 1642685813805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n             <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n             </div>\n             <form className='form' onSubmit={handleSubmit}>\n             <div>\n-            <TextInput name='email' label='Email' onChange={handleChange} />\n+            <TextInput name='email' label='Email' onChange={handleChange} type=\"email\" />\n             </div>\n             <div>\n             <TextInput name='password' label='Password' onChange={handleChange} type='password' />\n             </div>\n"
+                },
+                {
+                    "date": 1643029732918,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,38 +1,23 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n-import axios from 'axios';\n import { TextInput } from 'components/TextInput';\n+import { useAuth } from 'hooks/useAuth';\n \n const Home = () => {\n+  const auth = useAuth();\n   const router = useRouter();\n   const [form, setForm] = useState({});\n-  const [res,setRes] = useState({});\n-  const [error, setError] = useState('');\n   const handleSubmit = (event) => {\n     event.preventDefault();\n-     axios({\n-      method:'post',\n-      url:\"http://localhost:3000/api/user/login\",\n-      data:form\n-    }).then(({data}) => {\n-      setRes(data);\n-      if(data.status){\n-        sessionStorage.setItem('token',data.token);\n-        sessionStorage.setItem('id', data.id);\n-      }else{\n-      setError(data.message);\n-      }\n-    })\n+    auth.signin(form.email, form.password);\n   }\n   useEffect(() => {\n-    const token = sessionStorage.getItem('token');\n-    const id = sessionStorage.getItem('id');\n-    if(token && id){\n-      router.push(`${id}`);\n+    if(auth.user){\n+      router.push(`/${auth.user.id}`);\n     }\n-  },[router, res]);\n+  },[auth]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n@@ -51,11 +36,8 @@\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n-           {error && (<span className='error'>\n-              {error}\n-            </span>)}\n             </form>\n         </div>\n     </div>\n   )\n"
+                }
+            ],
+            "date": 1642671170808,
+            "name": "Commit-0",
+            "content": "import Link from 'next/link';\nimport {useRouter} from 'next/router';\nimport {useEffect} from 'react';\n\n\nconst Home = () => {\n  return (\n    <div>\n\n    </div>\n  )\n}\n\nexport default Home;"
+        }
+    ]
+}

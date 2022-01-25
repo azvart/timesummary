@@ -1,0 +1,70 @@
+{
+    "sourceFile": "pages/api/user/queries.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 13,
+            "patches": [
+                {
+                    "date": 1642599285686,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1642600169187,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,13 +18,13 @@\n         const hashPassword = await Hash(password);\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email}).save()\n+       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email});\n        const pass = await new Password({\n          email: user._id,\n          password: hashPassword\n-       }).save();\n+       });\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642600225710,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,13 +18,14 @@\n         const hashPassword = await Hash(password);\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email});\n-       const pass = await new Password({\n-         email: user._id,\n-         password: hashPassword\n-       });\n+        const pass = await new Password({\n+          email: req.body.email,\n+          password: hashPassword\n+        });\n+       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id});\n+\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642600246286,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,10 +21,10 @@\n         }\n         const pass = await new Password({\n           email: req.body.email,\n           password: hashPassword\n-        });\n-       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id});\n+        }).save();\n+       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n \n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n"
+                },
+                {
+                    "date": 1642600772585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,10 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const pass = await new Password({\n-          email: req.body.email,\n-          password: hashPassword\n+          user_email: req.body.email,\n+          user_password: hashPassword\n         }).save();\n        const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n \n        return res.status(200).json({message:\"User create\", status: true});\n"
+                },
+                {
+                    "date": 1642656223999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n         }\n         const pass = await new Password({\n           user_email: req.body.email,\n           user_password: hashPassword\n-        }).save();\n+        });\n        const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n \n        return res.status(200).json({message:\"User create\", status: true});\n        \n"
+                },
+                {
+                    "date": 1642656238969,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n           user_email: req.body.email,\n           user_password: hashPassword\n         });\n        const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n-\n+      await pass.save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642657478335,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,10 @@\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const pass = await new Password({\n-          user_email: req.body.email,\n-          user_password: hashPassword\n+          userEmail: req.body.email,\n+          userPassword: hashPassword\n         });\n        const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n       await pass.save();\n        return res.status(200).json({message:\"User create\", status: true});\n"
+                },
+                {
+                    "date": 1642657500347,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,11 +21,10 @@\n         }\n         const pass = await new Password({\n           userEmail: req.body.email,\n           userPassword: hashPassword\n-        });\n+        }).save();\n        const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n-      await pass.save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642657747451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,10 +21,17 @@\n         }\n         const pass = await new Password({\n           userEmail: req.body.email,\n           userPassword: hashPassword\n-        }).save();\n-       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n+        }).save((err, model) => {\n+          const user = new User({\n+            name: req.body.name,\n+            lastname: req.body.lastname,\n+            email: model._id,\n+            password: model._id\n+          })\n+        });\n+      //  const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642657763882,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,10 @@\n             name: req.body.name,\n             lastname: req.body.lastname,\n             email: model._id,\n             password: model._id\n-          })\n+          });\n+          user.save();\n         });\n       //  const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n"
+                },
+                {
+                    "date": 1642657951501,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         }).save((err, model) => {\n           const user = new User({\n             name: req.body.name,\n             lastname: req.body.lastname,\n-            email: model._id,\n+            email: req.body.email,\n             password: model._id\n           });\n           user.save();\n         });\n"
+                },
+                {
+                    "date": 1642660920526,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,21 +18,21 @@\n         const hashPassword = await Hash(password);\n         if(!hashPassword){\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n-        const pass = await new Password({\n-          userEmail: req.body.email,\n-          userPassword: hashPassword\n-        }).save((err, model) => {\n-          const user = new User({\n-            name: req.body.name,\n-            lastname: req.body.lastname,\n-            email: req.body.email,\n-            password: model._id\n-          });\n-          user.save();\n-        });\n-      //  const user = await new User({name:req.body.name, lastname:req.body.lastname, email:pass._id, password: pass._id}).save();\n+        // const pass = await new Password({\n+        //   userEmail: req.body.email,\n+        //   userPassword: hashPassword\n+        // }).save((err, model) => {\n+        //   const user = new User({\n+        //     name: req.body.name,\n+        //     lastname: req.body.lastname,\n+        //     email: req.body.email,\n+        //     password: model._id\n+        //   });\n+        //   user.save();\n+        // });\n+       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email, password: hashPassword}).save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                },
+                {
+                    "date": 1642660926518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n         //     password: model._id\n         //   });\n         //   user.save();\n         // });\n-       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email, password: hashPassword}).save();\n+       await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email, password: hashPassword}).save();\n        return res.status(200).json({message:\"User create\", status: true});\n        \n       }catch(error){\n         return res.status(400).json({message:error.message, status: false})\n"
+                }
+            ],
+            "date": 1642599285686,
+            "name": "Commit-0",
+            "content": "import { Hash } from \"../../../lib\";\nimport User from '../../../models/user.model';\nimport Password from '../../../models/password.model';\nimport dbConnect from '../../../lib/mongooseConnect';\n\nasync function handler(req, res){\n  const {method} = req;\n  const {name, lastname,email, password} = req.body;\n  await dbConnect();\n  switch(method){\n    case \"POST\":\n      try{\n        const currentUser = await User.findOne({email:email});\n        if(currentUser){\n          return res.status(400).json({message: `The user with email:${email} already yet`});\n        }\n\n        const hashPassword = await Hash(password);\n        if(!hashPassword){\n          return res.status(400).json({message:\"Invalid password\", status: false});\n        }\n       const user = await new User({name:req.body.name, lastname:req.body.lastname, email:req.body.email}).save()\n       const pass = await new Password({\n         email: user._id,\n         password: hashPassword\n       }).save();\n       return res.status(200).json({message:\"User create\", status: true});\n       \n      }catch(error){\n        return res.status(400).json({message:error.message, status: false})\n      }\n      case \"GET\":\n        try{\n          const { query:{ id } } = req;\n          const user = await User.find({id});\n          if(!user){\n            return  res.status(400).json({message:\"User not found\", status: false});\n          }\n\n        return  res.status(200).json({message:\" It's ok but never response\", status: true, user: user});\n        }catch (error){\n          return  res.status(400).json({message: error.message, status: false});\n        }\n    default:\n    return res.status(400).json({status: false});\n\n  }\n\n}\nexport default handler; "
+        }
+    ]
+}

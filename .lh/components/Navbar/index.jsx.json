@@ -1,0 +1,18 @@
+{
+    "sourceFile": "components/Navbar/index.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1642681648782,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1642681648782,
+            "name": "Commit-0",
+            "content": "import Link from 'next/link';\nimport Image from 'next/image';\nimport styles from './nav.module.scss';\nimport { useRouter } from 'next/router'\n\nfunction Navbar() {\n  const router = useRouter();\n  const handleClick = (e) => {\n    e.preventDefault()\n    router.push('/profile')\n  };\n  const logout = () => {\n    sessionStorage.removeItem('token')\n    sessionStorage.removeItem('id');\n  }\n  return (\n    <nav className={styles.header}>\n      <div className={styles.logo}>\n        <Image \n          src='/vironit_ws.png'\n          alt='logo'\n          width={250}\n          height={100}\n        />\n      </div>\n      \n      <ul className={styles.headerMenu}>\n        <li>\n          <Link href={`${router.query.id}/messages`} passHref>\n            <div className={styles.navBlock}>\n              <Image \n                src=\"/message.svg\"\n                alt=\"message\"\n                width={50}\n                height={50}\n              />\n              <span>Сообщения</span>\n            </div>\n          </Link>\n        </li>\n        <li>\n          <Link href=\"/reports\" passHref>\n            <div className={styles.navBlock}>\n              <Image \n                src=\"/calendar.svg\"\n                alt=\"calendar\"\n                width={50}\n                height={50}\n              />\n              <span>Отчеты</span>\n            </div>\n          </Link>\n        </li>\n        <li>\n          <Link href=\"/tasks\" passHref>\n            <div className={styles.navBlock}>\n              <Image \n                src=\"/tasks.svg\"\n                alt=\"tasks\"\n                width={50}\n                height={50}\n              />\n              <span>Задачи</span>\n            </div>\n          </Link>\n        </li>\n        <li>\n          <Link href=\"/employees\" passHref>\n            <div className={styles.navBlock}>\n              <Image \n                src=\"/employees.svg\"\n                alt=\"employees\"\n                width={50}\n                height={50}\n              />\n              <span>Сотрудники</span>\n            </div>\n          </Link>\n        </li> \n      </ul>\n      <div className={styles.wrapProfile}>\n          <Image \n            src=\"/avatar.svg\"\n            alt=\"avatar\"\n            width={50}\n            height={50}\n          />\n          <div>\n            <div className={styles.wrapProfile}>\n              {/* <h5>{data?.name} {data?.surname}</h5> */}\n              <h5>Name</h5>\n              {/* <small>{data?.email}</small> */}\n              <small>Email</small>\n            </div>\n            <div className={styles.wrapButtons}>\n              <button onClick={handleClick}>Мой профиль</button>\n              <button onClick={logout}>Выйти</button>\n            </div>\n          </div> \n        </div>\n    </nav>\n  )\n}\n\nexport default Navbar;"
+        }
+    ]
+}

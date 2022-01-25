@@ -1,0 +1,22 @@
+{
+    "sourceFile": "server/index.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1643006413435,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643006529360,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n-import express from 'express';\n-import next from 'next';\n+const  express  = require('express');\n+const  next =  require('next');\n \n \n const dev = process.env.NODE_ENV !== 'production';\n const app = next({dev});\n"
+                }
+            ],
+            "date": 1643006413435,
+            "name": "Commit-0",
+            "content": "import express from 'express';\nimport next from 'next';\n\n\nconst dev = process.env.NODE_ENV !== 'production';\nconst app = next({dev});\nconst handle = app.getRequestHandler();\nconst port = process.env.PORT || 3000;\n\n\n(async () => {\n  try{\n    await app.prepare();\n    const server = express();\n    server.all(\"*\", (req, res) => {\n      return handle(req, res);\n    });\n    server.listen(port, (err) => {\n      if(err) throw err;\n      console.log(`Ready on localhost:${port} - env ${process.env.NODE_ENV}`);\n    })\n  }catch(e){\n    console.error(e)\n    process.exit(1);\n  }\n})"
+        }
+    ]
+}

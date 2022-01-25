@@ -1,0 +1,78 @@
+{
+    "sourceFile": "hooks/useAuth.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 15,
+            "patches": [
+                {
+                    "date": 1643030575331,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643030623031,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,18 +22,16 @@\n   const router = useRouter();\n   const [user, setUser] = useState(null);\n \n   const signin = async (email, password) => {\n-    const response = await axios({\n+     await axios({\n       method: \"POST\",\n       url: \"http://localhost:3000/api/user/login\",\n       data: {\n         email: email,\n         password: password\n       }\n     });\n-    setUser(response.data);\n-    return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n     sessionStorage.removeItem('token');\n"
+                },
+                {
+                    "date": 1643030667991,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,16 +22,18 @@\n   const router = useRouter();\n   const [user, setUser] = useState(null);\n \n   const signin = async (email, password) => {\n-     await axios({\n+    const response = await axios({\n       method: \"POST\",\n       url: \"http://localhost:3000/api/user/login\",\n       data: {\n         email: email,\n         password: password\n       }\n     });\n+    setUser(response.data);\n+    return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n     sessionStorage.removeItem('token');\n"
+                },
+                {
+                    "date": 1643031011457,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,8 +30,9 @@\n         email: email,\n         password: password\n       }\n     });\n+    console.log(response);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031126957,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n         email: email,\n         password: password\n       }\n     });\n-    console.log(response);\n+    console.log(response.headers);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031152513,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n         email: email,\n         password: password\n       }\n     });\n-    console.log(response.headers);\n+    console.log(response.headers['set-cookie']);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031209582,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n         email: email,\n         password: password\n       }\n     });\n-    console.log(response.headers['set-cookie']);\n+    console.log(response.headers.cookies);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031243443,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,8 @@\n         email: email,\n         password: password\n       }\n     });\n-    console.log(response.headers.cookies);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031251003,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,10 @@\n       url: \"http://localhost:3000/api/user/login\",\n       data: {\n         email: email,\n         password: password\n-      }\n+      },\n+      withCredentials: true,\n     });\n     setUser(response.data);\n     return response.data;\n   }\n"
+                },
+                {
+                    "date": 1643031290640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,8 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n+    console.log(response);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031315172,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    console.log(response);\n+    console.log(response.headers);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643031340195,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,8 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    console.log(response.headers);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643032444891,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,8 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n+    console.log(response.headers['set-cookie']);\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n"
+                },
+                {
+                    "date": 1643032481376,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,10 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    console.log(response.headers['set-cookie']);\n-    setUser(response.data);\n+    setUser(response.headers['set-cookie']);\n     return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n"
+                },
+                {
+                    "date": 1643032506174,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    setUser(response.headers['set-cookie']);\n+    setUser();\n     return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n"
+                },
+                {
+                    "date": 1643032512455,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    setUser();\n+    setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n"
+                }
+            ],
+            "date": 1643030575331,
+            "name": "Commit-0",
+            "content": "import { useState, useEffect, useContext, createContext } from 'react';\nimport axios from 'axios';\nimport {useRouter} from 'next/router'\n\n\nconst authContext = createContext();\n\n\n\nexport function ProvideAuth({children}){\n  const auth = useProvideAuth() ;\n\n  return <authContext.Provider value={auth}>{children}</authContext.Provider>\n};\n\n\nexport const useAuth = () => {\n  return useContext(authContext)\n};\n\nfunction useProvideAuth(){\n  const router = useRouter();\n  const [user, setUser] = useState(null);\n\n  const signin = async (email, password) => {\n    const response = await axios({\n      method: \"POST\",\n      url: \"http://localhost:3000/api/user/login\",\n      data: {\n        email: email,\n        password: password\n      }\n    });\n    setUser(response.data);\n    return response.data;\n  }\n  const logout = () => {\n    setUser(null);\n    sessionStorage.removeItem('token');\n  }\n\n  return {\n    user,\n    signin,\n    logout,\n  }\n}"
+        }
+    ]
+}

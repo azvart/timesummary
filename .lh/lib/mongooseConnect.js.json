@@ -1,0 +1,102 @@
+{
+    "sourceFile": "lib/mongooseConnect.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 21,
+            "patches": [
+                {
+                    "date": 1642657228797,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643007415934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,18 @@\n import mongoose from 'mongoose';\n \n \n \n+const connection = {}\n \n \n-\n async function dbConnect () {\n-  if(mongoose.connections[0].readyState){\n+  \n+  if(connection.isConnected){\n     return;\n   }\n+  const db = await mongoose.connect(process.env.MONGO);\n \n-  await mongoose.connect(process.env.MONGO);\n+  connection.isConnected = db.connections[0].readyState;\n }\n \n-export default dbConnect\n+export default dbConnect;\n"
+                },
+                {
+                    "date": 1643013330458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n \n const connection = {}\n \n \n-async function dbConnect () {\n+export async function dbConnect () {\n   \n   if(connection.isConnected){\n     return;\n   }\n@@ -14,5 +14,5 @@\n \n   connection.isConnected = db.connections[0].readyState;\n }\n \n-export default dbConnect;\n+\n"
+                },
+                {
+                    "date": 1643016772050,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,9 @@\n   \n   if(connection.isConnected){\n     return;\n   }\n+  console.log(connection);\n   const db = await mongoose.connect(process.env.MONGO);\n \n   connection.isConnected = db.connections[0].readyState;\n }\n"
+                },
+                {
+                    "date": 1643017246480,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,19 +1,33 @@\n import mongoose from 'mongoose';\n \n \n \n-const connection = {}\n+const MONGO_URI = process.env.MONGO;\n \n+if(!MONGO_URI){\n+  throw new Error('Please define the MONGO environment variable inside .env.local');\n+}\n \n+let cached = global.mongoose;\n+\n+if(!cached){\n+  cached = global.mongoose = {conn:null, promise: null};\n+}\n export async function dbConnect () {\n   \n-  if(connection.isConnected){\n-    return;\n+  if(cached.conn){\n+    return cached.conn;\n   }\n-  console.log(connection);\n-  const db = await mongoose.connect(process.env.MONGO);\n \n-  connection.isConnected = db.connections[0].readyState;\n+  if(!cached.promise){\n+    cached.promise = mongoose.connect(MONGO_URI)\n+    .then((mongoose) => {\n+      return mongoose;\n+    })\n+  }\n+  cached.conn = await cached.promise;\n+  return cached.conn;\n+\n }\n \n \n"
+                },
+                {
+                    "date": 1643017331453,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n \n if(!cached){\n   cached = global.mongoose = {conn:null, promise: null};\n }\n-export async function dbConnect () {\n+async function dbConnect () {\n   \n   if(cached.conn){\n     return cached.conn;\n   }\n@@ -30,4 +30,5 @@\n \n }\n \n \n+export default dbConnect();\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643017418411,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,5 +30,5 @@\n \n }\n \n \n-export default dbConnect();\n\\ No newline at end of file\n+export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643017453468,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,8 +25,9 @@\n       return mongoose;\n     })\n   }\n   cached.conn = await cached.promise;\n+  console.log(cached)\n   return cached.conn;\n \n }\n \n"
+                },
+                {
+                    "date": 1643017466624,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,8 @@\n       return mongoose;\n     })\n   }\n   cached.conn = await cached.promise;\n-  console.log(cached)\n   return cached.conn;\n \n }\n \n"
+                },
+                {
+                    "date": 1643017967670,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,34 +1,7 @@\n-import mongoose from 'mongoose';\n+import { MongoClient } from \"mongodb\";\n \n-\n-\n const MONGO_URI = process.env.MONGO;\n \n if(!MONGO_URI){\n-  throw new Error('Please define the MONGO environment variable inside .env.local');\n-}\n-\n-let cached = global.mongoose;\n-\n-if(!cached){\n-  cached = global.mongoose = {conn:null, promise: null};\n-}\n-async function dbConnect () {\n-  \n-  if(cached.conn){\n-    return cached.conn;\n-  }\n-\n-  if(!cached.promise){\n-    cached.promise = mongoose.connect(MONGO_URI)\n-    .then((mongoose) => {\n-      return mongoose;\n-    })\n-  }\n-  cached.conn = await cached.promise;\n-  return cached.conn;\n-\n-}\n-\n-\n\\ No newline at end of file\n-export default dbConnect;\n+  throw new Error('Define the MONGO environmental variable')\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643018043521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,5 +3,21 @@\n const MONGO_URI = process.env.MONGO;\n \n if(!MONGO_URI){\n   throw new Error('Define the MONGO environmental variable')\n+}\n+\n+\n+let cachedClient = null;\n+let cachedDb = null;\n+\n+\n+export async function dbConnect(){\n+  if(cachedClient && cachedDb){\n+    return {\n+      client: cachedClient,\n+      db: cachedDb\n+    }\n+  }\n+\n+  let client = new MongoClient(MONGO_URI);\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643018575371,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,6 +18,9 @@\n       db: cachedDb\n     }\n   }\n \n+\n   let client = new MongoClient(MONGO_URI);\n+  await client.connect();\n+  let db = client.db(process.env.DB)\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643018605319,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,6 +21,12 @@\n \n \n   let client = new MongoClient(MONGO_URI);\n   await client.connect();\n-  let db = client.db(process.env.DB)\n+  let db = client.db(process.env.DB);\n+  cachedClient = client;\n+  cachedDb = db\n+  return {\n+    client: cachedClient,\n+    db: cachedDb\n+  }\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643023504811,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,32 +1,26 @@\n import { MongoClient } from \"mongodb\";\n \n-const MONGO_URI = process.env.MONGO;\n+const uri = process.env.MONGO;\n \n-if(!MONGO_URI){\n-  throw new Error('Define the MONGO environmental variable')\n-}\n \n+let client;\n+let clientPromise;\n \n-let cachedClient = null;\n-let cachedDb = null;\n+if(!process.env.MONGO){\n+  throw new Error(`Please add your Mongo Uri to .env.local`)\n+}\n \n-\n-export async function dbConnect(){\n-  if(cachedClient && cachedDb){\n-    return {\n-      client: cachedClient,\n-      db: cachedDb\n-    }\n+if(process.env.NODE_ENV === 'development'){\n+  if(!global._mongoClientPromise){\n+    client = new MongoClient(uri);\n+    global._mongoClientPromise = client.connect();\n   }\n+  clientPromise = global_mongClientPromise;\n+}else{\n\\ No newline at end of file\n+  client = new MongoClient(uri);\n+  clientPromise = client.connect();\n+}\n \n \n-  let client = new MongoClient(MONGO_URI);\n-  await client.connect();\n-  let db = client.db(process.env.DB);\n-  cachedClient = client;\n-  cachedDb = db\n-  return {\n-    client: cachedClient,\n-    db: cachedDb\n-  }\n-}\n+\n+export default clientPromise;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643023656420,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n   if(!global._mongoClientPromise){\n     client = new MongoClient(uri);\n     global._mongoClientPromise = client.connect();\n   }\n-  clientPromise = global_mongClientPromise;\n+  clientPromise = global_mongoClientPromise;\n }else{\n   client = new MongoClient(uri);\n   clientPromise = client.connect();\n }\n"
+                },
+                {
+                    "date": 1643023674065,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n   if(!global._mongoClientPromise){\n     client = new MongoClient(uri);\n     global._mongoClientPromise = client.connect();\n   }\n-  clientPromise = global_mongoClientPromise;\n+  clientPromise = global._mongoClientPromise;\n }else{\n   client = new MongoClient(uri);\n   clientPromise = client.connect();\n }\n"
+                },
+                {
+                    "date": 1643024016580,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n-import { MongoClient } from \"mongodb\";\n+// import { MongoClient } from \"mongodb\";\n+import mongoose from 'mongoose';\n \n const uri = process.env.MONGO;\n \n \n"
+                },
+                {
+                    "date": 1643024040306,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,14 +12,14 @@\n }\n \n if(process.env.NODE_ENV === 'development'){\n   if(!global._mongoClientPromise){\n-    client = new MongoClient(uri);\n+    client = mongoose.connect(uri); \n     global._mongoClientPromise = client.connect();\n   }\n   clientPromise = global._mongoClientPromise;\n }else{\n-  client = new MongoClient(uri);\n+  client = mongoose.connect(uri); \n   clientPromise = client.connect();\n }\n \n \n"
+                },
+                {
+                    "date": 1643024234519,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,27 +1,2 @@\n-// import { MongoClient } from \"mongodb\";\n import mongoose from 'mongoose';\n \n-const uri = process.env.MONGO;\n-\n-\n-let client;\n-let clientPromise;\n-\n-if(!process.env.MONGO){\n-  throw new Error(`Please add your Mongo Uri to .env.local`)\n-}\n-\n-if(process.env.NODE_ENV === 'development'){\n-  if(!global._mongoClientPromise){\n-    client = mongoose.connect(uri); \n-    global._mongoClientPromise = client.connect();\n-  }\n-  clientPromise = global._mongoClientPromise;\n-}else{\n-  client = mongoose.connect(uri); \n-  clientPromise = client.connect();\n-}\n-\n-\n-\n-export default clientPromise;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643024330734,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,15 @@\n import mongoose from 'mongoose';\n \n+\n+const connectedDb = handler => async (req,res) => {\n+  if(mongoose.connections[0].readyState){\n+    return handler(req,res);\n+  }\n+\n+  await mongoose.connect(process.env.MONGO);\n+\n+  return handler(req,res);\n+}\n+\n+\n+export default connectedDb;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643027735284,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,5 +11,5 @@\n   return handler(req,res);\n }\n \n \n-export default connectedDb;\n\\ No newline at end of file\n+export default connectedDb;    fcrefcr\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643027745496,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,5 +11,5 @@\n   return handler(req,res);\n }\n \n \n-export default connectedDb;    fcrefcr\n\\ No newline at end of file\n+export default connectedDb; \n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1642657228797,
+            "name": "Commit-0",
+            "content": "import mongoose from 'mongoose';\n\n\n\n\n\n\nasync function dbConnect () {\n  if(mongoose.connections[0].readyState){\n    return;\n  }\n\n  await mongoose.connect(process.env.MONGO);\n}\n\nexport default dbConnect\n"
+        }
+    ]
+}
