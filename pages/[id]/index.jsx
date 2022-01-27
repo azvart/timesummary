@@ -1,14 +1,14 @@
 import Layout from '../../Layout/index';
 import { useAuth } from '../../hooks/useAuth';
-
+import { Grid, Button } from 'semantic-ui-react';
 
 
 const Messages =() => {
   const auth = useAuth()
   return (
-    <div>
-      <button onClick={auth.visibleSideBar}>Visible</button>
-    </div>
+   <>
+   
+   </>
   )
 }
 

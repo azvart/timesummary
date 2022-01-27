@@ -30,13 +30,13 @@ Employees.getLayout = (page) => (
 
 export async function getServerSideProps(ctx){
 
-  const {data} = await axios({
-    method:"GET",
-    url:"http://localhost:3000/api/user/all"
-  });
+  // const {data} = await axios({
+  //   method:"GET",
+  //   url:"http://localhost:3000/api/user/all"
+  // });
   return {
     props:{
-      user: data.users
+      // user: data.users
     }
   }
 }

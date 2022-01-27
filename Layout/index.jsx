@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useAuth } from "hooks/useAuth";
-import { Sidebar, Grid, Segment, Header, Icon } from "semantic-ui-react";
+import { Sidebar, Grid, Segment, Header, Icon, Menu } from "semantic-ui-react";
 const Layout = ({children}) => {
   const auth = useAuth();
   return (
@@ -20,7 +20,7 @@ const Layout = ({children}) => {
         <Grid.Row columns={4}>
           <Grid.Column>
               <Link 
-              href='/[id]/'
+              href={`/${auth.user.user._id}/`}
               passHref={true}>
                 <a>
               <Icon name='facebook messenger' circular size="large" />
@@ -29,7 +29,7 @@ const Layout = ({children}) => {
               </Link>
           </Grid.Column>
           <Grid.Column>
-              <Link href='/[id]/reports'>
+              <Link href={`/${auth.user.user._id}/reports`}>
               <a>
               <Icon name='calendar' circular size='large' />
               <Header as='h2' icon textAlign="center">Reports</Header>
@@ -37,7 +37,7 @@ const Layout = ({children}) => {
               </Link>
           </Grid.Column>
           <Grid.Column>
-              <Link href='/tasks'>
+              <Link href={`/${auth.user.user._id}/tasks`}>
               <a>
               <Icon name='tasks' circular size="large"/>
               <Header as='h2' icon textAlign="center">Tasks</Header>
@@ -45,7 +45,7 @@ const Layout = ({children}) => {
               </Link>
           </Grid.Column>
           <Grid.Column>
-              <Link href='/employees'>
+              <Link href={`/${auth.user.user._id}/employees`}>
               <a>
               <Icon name='users' circular size='large' />
               <Header as='h2' icon textAlign="center">Employees</Header>
@@ -57,7 +57,18 @@ const Layout = ({children}) => {
     </Sidebar>
     <Sidebar.Pusher>
       <Segment basic>
+        <div>
+        <Menu pointing secondary size='massive'>
+          <Menu.Item name='Profile' />
+          <Menu.Menu position='right'>
+            <Menu.Item name='navigate' onClick={auth.visibleSideBar} />
+            <Menu.Item name='logout' onClick={auth.logout} />
+          </Menu.Menu>
+        </Menu>
+        <Segment size='massive'>
         {children}
+        </Segment>
+        </div>
       </Segment>
     </Sidebar.Pusher>
     </Sidebar.Pushable>
