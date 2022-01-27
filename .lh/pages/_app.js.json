@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 4,
             "patches": [
                 {
                     "date": 1642667408194,
@@ -16,6 +16,14 @@
                 {
                     "date": 1642671267069,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import Footer from 'components/Footer';\n import Navbar from 'components/Navbar';\n import Sidebar from 'components/Sidebar';\n import '../styles/layout.css';\n-\n+import '../styles/login.scss';\n function MyApp({ Component, pageProps }) {\n \n  const getLayout = Component.getLayout || ((page) => page)\n \n"
+                },
+                {
+                    "date": 1643276546380,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,14 @@\n import '../styles/globals.css';\n-import Footer from 'components/Footer';\n-import Navbar from 'components/Navbar';\n-import Sidebar from 'components/Sidebar';\n import '../styles/layout.css';\n import '../styles/login.scss';\n+import '../styles/card.scss';\n+import 'semantic-ui-css/semantic.min.css';\n+import { ProvideAuth } from '../hooks/useAuth';\n function MyApp({ Component, pageProps }) {\n \n  const getLayout = Component.getLayout || ((page) => page)\n \n- return getLayout(<Component {...pageProps} />)\n+ return <ProvideAuth>{getLayout(<Component {...pageProps} />)}</ProvideAuth>\n };\n \n export default MyApp;\n"
+                },
+                {
+                    "date": 1643278114252,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,5 @@\n-import '../styles/globals.css';\n-import '../styles/layout.css';\n import '../styles/login.scss';\n-import '../styles/card.scss';\n import 'semantic-ui-css/semantic.min.css';\n import { ProvideAuth } from '../hooks/useAuth';\n function MyApp({ Component, pageProps }) {\n \n"
                 }
             ],
             "date": 1642667408194,

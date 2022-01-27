@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 21,
+            "activePatchIndex": 30,
             "patches": [
                 {
                     "date": 1642657228797,
@@ -92,6 +92,42 @@
                 {
                     "date": 1643027745496,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,5 +11,5 @@\n   return handler(req,res);\n }\n \n \n-export default connectedDb;    fcrefcr\n\\ No newline at end of file\n+export default connectedDb; \n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643284261550,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,15 @@\n import mongoose from 'mongoose';\n \n \n-const connectedDb = handler => async (req,res) => {\n-  if(mongoose.connections[0].readyState){\n-    return handler(req,res);\n-  }\n+const MONGO_URI = process.env.MONGO;\n \n-  await mongoose.connect(process.env.MONGO);\n-\n-  return handler(req,res);\n+if(!MONGO_URI){\n+  throw new Error('Invalid mongodb uri')\n }\n\\ No newline at end of file\n \n \n-export default connectedDb; \n+let cached = global.mongoose;\n+\n+if(!cached){\n+  cached = global.mongoose = {conn: null, promise: null}\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285402579,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,7 +9,26 @@\n \n \n let cached = global.mongoose;\n \n+console.log(global.mongoose);\n if(!cached){\n-  cached = global.mongoose = {conn: null, promise: null}\n\\ No newline at end of file\n-}\n+  cached = global.mongoose = { conn: null, promise: null }\n+}\n+\n+\n+async function dbConnect(){\n+  if(cached.conn){\n+    return cached.conn;\n+  }\n+\n+  if(!cached.promise){\n+    cached.promise = mongoose.connect(MONGO_URI).then(mongoose => {\n+      return mongoose;\n+    })\n+  }\n+\n+  cached.conn = await cached.promise;\n+  return cached.conn;\n+}\n+\n+export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285530127,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n \n \n let cached = global.mongoose;\n \n-console.log(global.mongoose);\n+\n if(!cached){\n   cached = global.mongoose = { conn: null, promise: null }\n }\n \n"
+                },
+                {
+                    "date": 1643285922518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,6 +29,6 @@\n \n   cached.conn = await cached.promise;\n   return cached.conn;\n }\n-\n+console.log(global.mongoose)\n export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285953825,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,6 +29,6 @@\n \n   cached.conn = await cached.promise;\n   return cached.conn;\n }\n-console.log(global.mongoose)\n+console.log(global.mongoose.models)\n export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285967636,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,6 +29,6 @@\n \n   cached.conn = await cached.promise;\n   return cached.conn;\n }\n-console.log(global.mongoose.models)\n+console.log(global.mongoose.conn)\n export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285996769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,6 +29,5 @@\n \n   cached.conn = await cached.promise;\n   return cached.conn;\n }\n-console.log(global.mongoose.conn)\n export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643286003867,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,7 +27,8 @@\n     })\n   }\n \n   cached.conn = await cached.promise;\n+  console.log(cached.conn);\n   return cached.conn;\n }\n export default dbConnect;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643288172304,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,8 +27,7 @@\n     })\n   }\n \n   cached.conn = await cached.promise;\n-  console.log(cached.conn);\n   return cached.conn;\n }\n export default dbConnect;\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1642657228797,

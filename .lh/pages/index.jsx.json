@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 71,
+            "activePatchIndex": 103,
             "patches": [
                 {
                     "date": 1642671170808,
@@ -292,6 +292,134 @@
                 {
                     "date": 1643029732918,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,38 +1,23 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n-import axios from 'axios';\n import { TextInput } from 'components/TextInput';\n+import { useAuth } from 'hooks/useAuth';\n \n const Home = () => {\n+  const auth = useAuth();\n   const router = useRouter();\n   const [form, setForm] = useState({});\n-  const [res,setRes] = useState({});\n-  const [error, setError] = useState('');\n   const handleSubmit = (event) => {\n     event.preventDefault();\n-     axios({\n-      method:'post',\n-      url:\"http://localhost:3000/api/user/login\",\n-      data:form\n-    }).then(({data}) => {\n-      setRes(data);\n-      if(data.status){\n-        sessionStorage.setItem('token',data.token);\n-        sessionStorage.setItem('id', data.id);\n-      }else{\n-      setError(data.message);\n-      }\n-    })\n+    auth.signin(form.email, form.password);\n   }\n   useEffect(() => {\n-    const token = sessionStorage.getItem('token');\n-    const id = sessionStorage.getItem('id');\n-    if(token && id){\n-      router.push(`${id}`);\n+    if(auth.user){\n+      router.push(`/${auth.user.id}`);\n     }\n-  },[router, res]);\n+  },[auth]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n@@ -51,11 +36,8 @@\n             </div>\n             <div className='btn-container'>\n               <button className='login-btn' type='submit'>Login</button>\n             </div>\n-           {error && (<span className='error'>\n-              {error}\n-            </span>)}\n             </form>\n         </div>\n     </div>\n   )\n"
+                },
+                {
+                    "date": 1643276878019,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n-import { TextInput } from 'components/TextInput';\n import { useAuth } from 'hooks/useAuth';\n \n const Home = () => {\n   const auth = useAuth();\n@@ -13,9 +12,9 @@\n     auth.signin(form.email, form.password);\n   }\n   useEffect(() => {\n     if(auth.user){\n-      router.push(`/${auth.user.id}`);\n+      router.push(`/${auth.user.user._id}`);\n     }\n   },[auth]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n"
+                },
+                {
+                    "date": 1643276953946,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,11 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n import { useAuth } from 'hooks/useAuth';\n+import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';\n \n+\n const Home = () => {\n   const auth = useAuth();\n   const router = useRouter();\n   const [form, setForm] = useState({});\n"
+                },
+                {
+                    "date": 1643276992031,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,26 +22,11 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   return (\n-    <div className='login-container'>\n-        <div className='login-form'>\n-            <div>\n-            <Image width={200} height={50} alt='' src='/logo.png' quality={100} />\n-            </div>\n-            <form className='form' onSubmit={handleSubmit}>\n-            <div>\n-            <TextInput name='email' label='Email' onChange={handleChange} type=\"email\" />\n-            </div>\n-            <div>\n-            <TextInput name='password' label='Password' onChange={handleChange} type='password' />\n-            </div>\n-            <div className='btn-container'>\n-              <button className='login-btn' type='submit'>Login</button>\n-            </div>\n-            </form>\n-        </div>\n-    </div>\n+    <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n+\n+    </Grid>\n   )\n }\n \n export default Home;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643277001405,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n     setForm({...form, [name]:value})\n   }\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n-\n+      \n     </Grid>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643277030790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,11 @@\n     setForm({...form, [name]:value})\n   }\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n-      \n+      <Grid.Column style={{maxWidth: 450}}>\n+        \n+      </Grid.Column> \n     </Grid>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643277039682,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import {useRouter} from 'next/router';\n import {useEffect, useState} from 'react';\n import Image from 'next/image';\n import { useAuth } from 'hooks/useAuth';\n-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';\n+import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';\n \n \n const Home = () => {\n   const auth = useAuth();\n@@ -24,9 +24,9 @@\n   }\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n       <Grid.Column style={{maxWidth: 450}}>\n-        \n+\n       </Grid.Column> \n     </Grid>\n   )\n }\n"
+                },
+                {
+                    "date": 1643277114382,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,11 @@\n   }\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n       <Grid.Column style={{maxWidth: 450}}>\n-\n+        <Header as='h2' color='teal' textAlign='center'>\n+          <Image alt='' src='/logo.png' />\n+        </Header>\n       </Grid.Column> \n     </Grid>\n   )\n }\n"
+                },
+                {
+                    "date": 1643277131279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n-          <Image alt='' src='/logo.png' />\n+          <Image alt='' src='/logo.png' width={450} height={450} />\n         </Header>\n       </Grid.Column> \n     </Grid>\n   )\n"
+                },
+                {
+                    "date": 1643277140017,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n-          <Image alt='' src='/logo.png' width={450} height={450} />\n+          <Image alt='' src='/logo.png' width={150} height={150} />\n         </Header>\n       </Grid.Column> \n     </Grid>\n   )\n"
+                },
+                {
+                    "date": 1643277149116,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n   return (\n     <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n-          <Image alt='' src='/logo.png' width={150} height={150} />\n+          <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n       </Grid.Column> \n     </Grid>\n   )\n"
+                },
+                {
+                    "date": 1643277230329,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,8 +27,13 @@\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n           <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n+        <Form size='large'>\n+          <Segment stacked>\n+              <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail adress' />\n+          </Segment>\n+        </Form>\n       </Grid.Column> \n     </Grid>\n   )\n }\n"
+                },
+                {
+                    "date": 1643277280451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,8 +30,15 @@\n         </Header>\n         <Form size='large'>\n           <Segment stacked>\n               <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail adress' />\n+              <Form.Input\n+                fluid\n+                icon='lock'\n+                iconPosition='left'\n+                placeholder='password'\n+                type='password'\n+              />\n           </Segment>\n         </Form>\n       </Grid.Column> \n     </Grid>\n"
+                },
+                {
+                    "date": 1643277290752,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -34,9 +34,9 @@\n               <Form.Input\n                 fluid\n                 icon='lock'\n                 iconPosition='left'\n-                placeholder='password'\n+                placeholder='Password'\n                 type='password'\n               />\n           </Segment>\n         </Form>\n"
+                },
+                {
+                    "date": 1643277321218,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,8 +37,11 @@\n                 iconPosition='left'\n                 placeholder='Password'\n                 type='password'\n               />\n+              <Button color='teal' fluid size='large'>\n+                  Login\n+              </Button>\n           </Segment>\n         </Form>\n       </Grid.Column> \n     </Grid>\n"
+                },
+                {
+                    "date": 1643277438000,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   return (\n-    <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' >\n+    <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n           <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n"
+                },
+                {
+                    "date": 1643277506834,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   return (\n-    <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' className='login-container'>\n+    <Grid textAlign='center' style={{height: '100vh', margin: '0'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n           <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n"
+                },
+                {
+                    "date": 1643277535052,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   return (\n-    <Grid textAlign='center' style={{height: '100vh', margin: '0'}} verticalAlign='middle' className='login-container'>\n+    <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n           <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n"
+                },
+                {
+                    "date": 1643277565095,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,9 @@\n                 iconPosition='left'\n                 placeholder='Password'\n                 type='password'\n               />\n-              <Button color='teal' fluid size='large'>\n+              <Button color='teal' fluid size='large' onClick={handleSubmit}>\n                   Login\n               </Button>\n           </Segment>\n         </Form>\n"
+                },
+                {
+                    "date": 1643277600640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,15 +29,17 @@\n           <Image alt='' src='/logo.png' width={200} height={100} />\n         </Header>\n         <Form size='large'>\n           <Segment stacked>\n-              <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail adress' />\n+              <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail adress' name='email' onChange={handleChange} />\n               <Form.Input\n                 fluid\n                 icon='lock'\n                 iconPosition='left'\n                 placeholder='Password'\n                 type='password'\n+                name='password'\n+                onChange={handleChange}\n               />\n               <Button color='teal' fluid size='large' onClick={handleSubmit}>\n                   Login\n               </Button>\n"
+                },
+                {
+                    "date": 1643277626961,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,8 @@\n   const auth = useAuth();\n   const router = useRouter();\n   const [form, setForm] = useState({});\n   const handleSubmit = (event) => {\n-    event.preventDefault();\n     auth.signin(form.email, form.password);\n   }\n   useEffect(() => {\n     if(auth.user){\n"
+                },
+                {
+                    "date": 1643283384552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,13 +11,8 @@\n   const [form, setForm] = useState({});\n   const handleSubmit = (event) => {\n     auth.signin(form.email, form.password);\n   }\n-  useEffect(() => {\n-    if(auth.user){\n-      router.push(`/${auth.user.user._id}`);\n-    }\n-  },[auth]);\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n"
+                },
+                {
+                    "date": 1643287687500,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,13 @@\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n+  useEffect(() => {\n+    if(auth){\n+      router.push(`/${auth.user._id}`)\n+    }\n+  },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n"
+                },
+                {
+                    "date": 1643287717079,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,8 +18,10 @@\n   }\n   useEffect(() => {\n     if(auth){\n       router.push(`/${auth.user._id}`)\n+    }else{\n+      router.push('/')\n     }\n   },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n"
+                },
+                {
+                    "date": 1643287728245,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth){\n+    if(auth.user){\n       router.push(`/${auth.user._id}`)\n     }else{\n       router.push('/')\n     }\n"
+                },
+                {
+                    "date": 1643287741564,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth.user){\n+    if(auth.user._id){\n       router.push(`/${auth.user._id}`)\n     }else{\n       router.push('/')\n     }\n"
+                },
+                {
+                    "date": 1643287793178,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth.user._id){\n+    if(auth.user._id.length){\n       router.push(`/${auth.user._id}`)\n     }else{\n       router.push('/')\n     }\n"
+                },
+                {
+                    "date": 1643287807407,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth.user._id.length){\n+    if(auth.user){\n       router.push(`/${auth.user._id}`)\n     }else{\n       router.push('/')\n     }\n"
+                },
+                {
+                    "date": 1643287952350,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth.user){\n+    if(auth.user !== null){\n       router.push(`/${auth.user._id}`)\n     }else{\n       router.push('/')\n     }\n"
+                },
+                {
+                    "date": 1643287964809,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,10 +18,8 @@\n   }\n   useEffect(() => {\n     if(auth.user !== null){\n       router.push(`/${auth.user._id}`)\n-    }else{\n-      router.push('/')\n     }\n   },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n"
+                },
+                {
+                    "date": 1643288021351,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n     if(auth.user !== null){\n-      router.push(`/${auth.user._id}`)\n+      router.replace(`/${auth.user._id}`)\n     }\n   },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n"
+                },
+                {
+                    "date": 1643288040737,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,13 +15,13 @@\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n-  useEffect(() => {\n-    if(auth.user !== null){\n-      router.replace(`/${auth.user._id}`)\n-    }\n-  },[auth])\n+  // useEffect(() => {\n+  //   if(auth.user !== null){\n+  //     router.replace(`/${auth.user._id}`)\n+  //   }\n+  // },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n"
+                },
+                {
+                    "date": 1643288074444,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,13 +15,13 @@\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n-  // useEffect(() => {\n-  //   if(auth.user !== null){\n-  //     router.replace(`/${auth.user._id}`)\n-  //   }\n-  // },[auth])\n+  useEffect(() => {\n+    if(auth.user.user !== null){\n+      router.replace(`/${auth.user._id}`)\n+    }\n+  },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n"
                 }
             ],
             "date": 1642671170808,

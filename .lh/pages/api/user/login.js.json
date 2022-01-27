@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 59,
+            "activePatchIndex": 83,
             "patches": [
                 {
                     "date": 1642659523196,
@@ -244,6 +244,102 @@
                 {
                     "date": 1643030515914,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,8 @@\n           return res.status(400).json({message:\"Invalid password\", status: false});\n         }\n         const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n         res.cookie(\"token\", token);\n-        // return res.status(200).json({message:\"Ok\", status: true, user: user});\n         return res.status(200).end(res.getHeader('Set-Cookie'));\n \n       }catch(e){\n         return res.status(400).json({message:e.message, status: false});\n"
+                },
+                {
+                    "date": 1643283594250,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,37 +1,26 @@\n-import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n-import { Compare} from '../../../lib';\n+import {Compare} from '../../../lib/hashcomparePassword';\n import connectedDb from '../../../lib/mongooseConnect';\n-import cookies from '../../../lib/cookies';\n async function handler(req, res){\n \n   const {email, password} = req.body;\n   const {method} = req;\n   switch(method){\n     case \"POST\":\n-      try{\n-\n-        if(!email || !password){\n-          return res.status(400).json({message:\"Invalid email or password\", status: false});\n-        }\n-        const user = await User.findOne({email: email}).populate('password').exec();\n-        const comparePassword = await Compare(req.body.password, user.password.userPassword);\n-        if(comparePassword !== true){\n-          return res.status(400).json({message:\"Invalid password\", status: false});\n-        }\n-        const token = jwt.sign({id: user._id, name: user.name},process.env.SECRET,{expiresIn: 1000000});\n-        res.cookie(\"token\", token);\n-        return res.status(200).end(res.getHeader('Set-Cookie'));\n-\n-      }catch(e){\n-        return res.status(400).json({message:e.message, status: false});\n-      }\n+    {\n+     const user = await User.findOne({email:email}).populate('passwords');\n+     const compare = await Compare(password, user.password.userPassword);\n+     if(compare !== true){\n+       return res.status(400).json({message:\"Invalid password\", status: false});\n+     }\n+     return res.status(200).json({message:\"OK\", status: true, user: user});\n+    }\n     default:\n-      return res.status(200).json({message: 'Invalid method', status: false});\n+      return res.status(400).json({message:\"Invalid method\", status: false});\n   }\n \n }\n \n \n \n-export default connectedDb(cookies(handler));\n+export default connectedDb(handler);\n"
+                },
+                {
+                    "date": 1643283605361,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   const {method} = req;\n   switch(method){\n     case \"POST\":\n     {\n-     const user = await User.findOne({email:email}).populate('passwords');\n+     const user = await User.findOne({email:email}).populate('password');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643283632845,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   const {method} = req;\n   switch(method){\n     case \"POST\":\n     {\n-     const user = await User.findOne({email:email}).populate('password');\n+     const user = await User.find({email:email}).populate('password');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643285409133,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,5 +22,5 @@\n }\n \n \n \n-export default connectedDb(handler);\n+export default handler;\n"
+                },
+                {
+                    "date": 1643285425872,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import User from '../../../models/user.model';\n import {Compare} from '../../../lib/hashcomparePassword';\n-import connectedDb from '../../../lib/mongooseConnect';\n+import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n-\n+  await dbConnect();\n   const {email, password} = req.body;\n   const {method} = req;\n   switch(method){\n     case \"POST\":\n"
+                },
+                {
+                    "date": 1643285489671,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,8 @@\n import User from '../../../models/user.model';\n import {Compare} from '../../../lib/hashcomparePassword';\n import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n-  await dbConnect();\n   const {email, password} = req.body;\n   const {method} = req;\n   switch(method){\n     case \"POST\":\n"
+                },
+                {
+                    "date": 1643285559375,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,13 @@\n import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n+  await dbConnect();\n   switch(method){\n     case \"POST\":\n     {\n+\n      const user = await User.find({email:email}).populate('password');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n"
+                },
+                {
+                    "date": 1643285665963,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   switch(method){\n     case \"POST\":\n     {\n \n-     const user = await User.find({email:email}).populate('password');\n+     const user = await User.find({email:email}).populate('passwords');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643285676301,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   switch(method){\n     case \"POST\":\n     {\n \n-     const user = await User.find({email:email}).populate('passwords');\n+     const user = await User.find({email:email}).populate('password');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643286027269,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,22 +4,22 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   await dbConnect();\n-  switch(method){\n-    case \"POST\":\n-    {\n+  // switch(method){\n+  //   case \"POST\":\n+  //   {\n \n-     const user = await User.find({email:email}).populate('password');\n-     const compare = await Compare(password, user.password.userPassword);\n-     if(compare !== true){\n-       return res.status(400).json({message:\"Invalid password\", status: false});\n-     }\n-     return res.status(200).json({message:\"OK\", status: true, user: user});\n-    }\n-    default:\n-      return res.status(400).json({message:\"Invalid method\", status: false});\n-  }\n+  //    const user = await User.find({email:email}).populate('password');\n+  //    const compare = await Compare(password, user.password.userPassword);\n+  //    if(compare !== true){\n+  //      return res.status(400).json({message:\"Invalid password\", status: false});\n+  //    }\n+  //    return res.status(200).json({message:\"OK\", status: true, user: user});\n+  //   }\n+  //   default:\n+  //     return res.status(400).json({message:\"Invalid method\", status: false});\n+  // }\n \n }\n \n \n"
+                },
+                {
+                    "date": 1643286033703,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,22 +4,22 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   await dbConnect();\n-  // switch(method){\n-  //   case \"POST\":\n-  //   {\n+  switch(method){\n+    // case \"POST\":\n+    // {\n \n-  //    const user = await User.find({email:email}).populate('password');\n-  //    const compare = await Compare(password, user.password.userPassword);\n-  //    if(compare !== true){\n-  //      return res.status(400).json({message:\"Invalid password\", status: false});\n-  //    }\n-  //    return res.status(200).json({message:\"OK\", status: true, user: user});\n-  //   }\n-  //   default:\n-  //     return res.status(400).json({message:\"Invalid method\", status: false});\n-  // }\n+    //  const user = await User.find({email:email}).populate('password');\n+    //  const compare = await Compare(password, user.password.userPassword);\n+    //  if(compare !== true){\n+    //    return res.status(400).json({message:\"Invalid password\", status: false});\n+    //  }\n+    //  return res.status(200).json({message:\"OK\", status: true, user: user});\n+    // }\n+    default:\n+      return res.status(400).json({message:\"Invalid method\", status: false});\n+  }\n \n }\n \n \n"
+                },
+                {
+                    "date": 1643286112356,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,10 @@\n import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n-  await dbConnect();\n+  const db = await dbConnect();\n+  console.log(db);\n   switch(method){\n     // case \"POST\":\n     // {\n \n"
+                },
+                {
+                    "date": 1643286155104,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   const db = await dbConnect();\n-  console.log(db);\n+  console.log(db.close());\n   switch(method){\n     // case \"POST\":\n     // {\n \n"
+                },
+                {
+                    "date": 1643286165066,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,8 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   const db = await dbConnect();\n-  console.log(db.close());\n   switch(method){\n     // case \"POST\":\n     // {\n \n"
+                },
+                {
+                    "date": 1643286175469,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,22 +4,22 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   const db = await dbConnect();\n-  switch(method){\n-    // case \"POST\":\n-    // {\n+  // switch(method){\n+  //   // case \"POST\":\n+  //   // {\n \n-    //  const user = await User.find({email:email}).populate('password');\n-    //  const compare = await Compare(password, user.password.userPassword);\n-    //  if(compare !== true){\n-    //    return res.status(400).json({message:\"Invalid password\", status: false});\n-    //  }\n-    //  return res.status(200).json({message:\"OK\", status: true, user: user});\n-    // }\n-    default:\n-      return res.status(400).json({message:\"Invalid method\", status: false});\n-  }\n+  //   //  const user = await User.find({email:email}).populate('password');\n+  //   //  const compare = await Compare(password, user.password.userPassword);\n+  //   //  if(compare !== true){\n+  //   //    return res.status(400).json({message:\"Invalid password\", status: false});\n+  //   //  }\n+  //   //  return res.status(200).json({message:\"OK\", status: true, user: user});\n+  //   // }\n+  //   default:\n+  //     return res.status(400).json({message:\"Invalid method\", status: false});\n+  // }\n \n }\n \n \n"
+                },
+                {
+                    "date": 1643286200385,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n   //   // }\n   //   default:\n   //     return res.status(400).json({message:\"Invalid method\", status: false});\n   // }\n-\n+  res.status(200).json({message:\"ok\"})\n }\n \n \n \n"
+                },
+                {
+                    "date": 1643287234229,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import User from '../../../models/user.model';\n+import {User} from '../../../models/user.model';\n import {Compare} from '../../../lib/hashcomparePassword';\n import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n   const {email, password} = req.body;\n"
+                },
+                {
+                    "date": 1643287240666,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,23 +4,23 @@\n async function handler(req, res){\n   const {email, password} = req.body;\n   const {method} = req;\n   const db = await dbConnect();\n-  // switch(method){\n-  //   // case \"POST\":\n-  //   // {\n+  switch(method){\n+    // case \"POST\":\n+    // {\n \n-  //   //  const user = await User.find({email:email}).populate('password');\n-  //   //  const compare = await Compare(password, user.password.userPassword);\n-  //   //  if(compare !== true){\n-  //   //    return res.status(400).json({message:\"Invalid password\", status: false});\n-  //   //  }\n-  //   //  return res.status(200).json({message:\"OK\", status: true, user: user});\n-  //   // }\n-  //   default:\n-  //     return res.status(400).json({message:\"Invalid method\", status: false});\n-  // }\n-  res.status(200).json({message:\"ok\"})\n+    //  const user = await User.find({email:email}).populate('password');\n+    //  const compare = await Compare(password, user.password.userPassword);\n+    //  if(compare !== true){\n+    //    return res.status(400).json({message:\"Invalid password\", status: false});\n+    //  }\n+    //  return res.status(200).json({message:\"OK\", status: true, user: user});\n+    // }\n+    default:\n+      return res.status(400).json({message:\"Invalid method\", status: false});\n+  }\n+ \n }\n \n \n \n"
+                },
+                {
+                    "date": 1643287246007,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,18 +5,18 @@\n   const {email, password} = req.body;\n   const {method} = req;\n   const db = await dbConnect();\n   switch(method){\n-    // case \"POST\":\n-    // {\n+    case \"POST\":\n+    {\n \n-    //  const user = await User.find({email:email}).populate('password');\n-    //  const compare = await Compare(password, user.password.userPassword);\n-    //  if(compare !== true){\n-    //    return res.status(400).json({message:\"Invalid password\", status: false});\n-    //  }\n-    //  return res.status(200).json({message:\"OK\", status: true, user: user});\n-    // }\n+     const user = await User.find({email:email}).populate('password');\n+     const compare = await Compare(password, user.password.userPassword);\n+     if(compare !== true){\n+       return res.status(400).json({message:\"Invalid password\", status: false});\n+     }\n+     return res.status(200).json({message:\"OK\", status: true, user: user});\n+    }\n     default:\n       return res.status(400).json({message:\"Invalid method\", status: false});\n   }\n  \n"
+                },
+                {
+                    "date": 1643287492593,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,9 @@\n     case \"POST\":\n     {\n \n      const user = await User.find({email:email}).populate('password');\n+     console.log('shit user', user);\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643287509561,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n     case \"POST\":\n     {\n \n      const user = await User.find({email:email}).populate('password');\n-     console.log('shit user', user);\n+     console.log('shit user', user.password);\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
+                },
+                {
+                    "date": 1643287535302,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   switch(method){\n     case \"POST\":\n     {\n \n-     const user = await User.find({email:email}).populate('password');\n+     const user = await User.find({email:email}).populate('password').exec();\n      console.log('shit user', user.password);\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n"
+                },
+                {
+                    "date": 1643287550536,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   switch(method){\n     case \"POST\":\n     {\n \n-     const user = await User.find({email:email}).populate('password').exec();\n+     const user = await User.findOne({email:email}).populate('password').exec();\n      console.log('shit user', user.password);\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n"
+                },
+                {
+                    "date": 1643287593831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,10 +8,9 @@\n   switch(method){\n     case \"POST\":\n     {\n \n-     const user = await User.findOne({email:email}).populate('password').exec();\n-     console.log('shit user', user.password);\n+     const user = await User.findOne({email:email}).populate('password');\n      const compare = await Compare(password, user.password.userPassword);\n      if(compare !== true){\n        return res.status(400).json({message:\"Invalid password\", status: false});\n      }\n"
                 }
             ],
             "date": 1642659523196,

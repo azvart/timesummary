@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 16,
+            "activePatchIndex": 72,
             "patches": [
                 {
                     "date": 1642667245663,
@@ -72,6 +72,230 @@
                 {
                     "date": 1642685233232,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,9 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n-import Sidebar from \"components/Sidebar\";\n+// import Sidebar from \"components/Sidebar\";\n+import Sidebar from 'components/Sidebar';\n+\n const Layout = ({children}) => {\n   return (\n     <>\n       <Navbar />\n"
+                },
+                {
+                    "date": 1643278130636,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,18 +1,19 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n-// import Sidebar from \"components/Sidebar\";\n import Sidebar from 'components/Sidebar';\n-\n+import { useAuth } from \"hooks/useAuth\";\n+import { useRouter } from \"next/router\";\n const Layout = ({children}) => {\n+  const auth = useAuth();\n+  const router = useRouter();\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n           <Sidebar />\n           {children}\n         </div>\n-\n       <Footer />\n     </>\n   )\n }\n"
+                },
+                {
+                    "date": 1643278143977,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,9 @@\n import Footer from \"components/Footer\";\n import Navbar from \"components/Navbar\";\n import Sidebar from 'components/Sidebar';\n import { useAuth } from \"hooks/useAuth\";\n-import { useRouter } from \"next/router\";\n const Layout = ({children}) => {\n-  const auth = useAuth();\n-  const router = useRouter();\n   return (\n     <>\n       <Navbar />\n         <div className=\"wrapper\">\n"
+                },
+                {
+                    "date": 1643278323735,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,11 @@\n-import Footer from \"components/Footer\";\n-import Navbar from \"components/Navbar\";\n-import Sidebar from 'components/Sidebar';\n+\n import { useAuth } from \"hooks/useAuth\";\n+import { Sidebar, Grid, Segment } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   return (\n     <>\n-      <Navbar />\n-        <div className=\"wrapper\">\n-          <Sidebar />\n-          {children}\n-        </div>\n-      <Footer />\n+     \n     </>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643278499508,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,16 @@\n import { useAuth } from \"hooks/useAuth\";\n import { Sidebar, Grid, Segment } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   return (\n-    <>\n-     \n-    </>\n+    <Sidebar\n+      as={Segment}\n+      animation=\"overlay\"\n+      direction=\"top\"\n+      visible={false}\n+    >\n+\n+    </Sidebar>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1643278589702,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,26 @@\n \n import { useAuth } from \"hooks/useAuth\";\n-import { Sidebar, Grid, Segment } from \"semantic-ui-react\";\n+import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   return (\n+    <>\n     <Sidebar\n       as={Segment}\n       animation=\"overlay\"\n       direction=\"top\"\n       visible={false}\n     >\n-\n+      <Grid textAlign=\"center\">\n+        <Grid.Row columns={1}>\n+            <Grid.Column>\n+                <Header as='h3'>SideBar</Header>\n+            </Grid.Column>\n+        </Grid.Row>\n+      </Grid>\n     </Sidebar>\n+    {children}\n+    </>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1643278650045,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,16 +7,19 @@\n     <Sidebar\n       as={Segment}\n       animation=\"overlay\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n                 <Header as='h3'>SideBar</Header>\n             </Grid.Column>\n         </Grid.Row>\n+        <Grid.Row columns={3}>\n+          \n+        </Grid.Row>\n       </Grid>\n     </Sidebar>\n     {children}\n     </>\n"
+                },
+                {
+                    "date": 1643278697587,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,20 @@\n                 <Header as='h3'>SideBar</Header>\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={3}>\n-          \n+          <Grid.Column>\n+              <Header>Message</Header>\n+          </Grid.Column>\n+          <Grid.Column>\n+              <Header>Reports</Header>\n+          </Grid.Column>\n+          <Grid.Column>\n+              <Header>Tasks</Header>\n+          </Grid.Column>\n+          <Grid.Column>\n+              <Header>Employees</Header>\n+          </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n     {children}\n"
+                },
+                {
+                    "date": 1643278709343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"overlay\"\n       direction=\"top\"\n-      visible={true}\n+      visible={false}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278719728,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,17 +7,17 @@\n     <Sidebar\n       as={Segment}\n       animation=\"overlay\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n                 <Header as='h3'>SideBar</Header>\n             </Grid.Column>\n         </Grid.Row>\n-        <Grid.Row columns={3}>\n+        <Grid.Row columns={4}>\n           <Grid.Column>\n               <Header>Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278738592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"overlay\"\n+      animation=\"push\"\n       direction=\"top\"\n       visible={true}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643278748216,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"push\"\n       direction=\"top\"\n-      visible={true}\n+      visible={false}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278793993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,11 +5,11 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"push\"\n+      animation=\"scale down\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278800993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={true}\n+      visible={false}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278846322,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n@@ -31,9 +31,11 @@\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n+    <Sidebar.Pusher>\n     {children}\n+    </Sidebar.Pusher>\n     </>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643278853283,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={true}\n+      visible={false}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643278925711,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n@@ -31,9 +31,9 @@\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n-    <Sidebar.Pusher>\n+    <Sidebar.Pusher dimmed={false}>\n     {children}\n     </Sidebar.Pusher>\n     </>\n   )\n"
+                },
+                {
+                    "date": 1643278931517,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n-    <Sidebar.Pusher dimmed={false}>\n+    <Sidebar.Pusher dimmed={true}>\n     {children}\n     </Sidebar.Pusher>\n     </>\n   )\n"
+                },
+                {
+                    "date": 1643278961717,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,11 @@\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n     <Sidebar.Pusher dimmed={true}>\n-    {children}\n+      <Segment basic>\n+        {children}\n+      </Segment>\n     </Sidebar.Pusher>\n     </>\n   )\n }\n"
+                },
+                {
+                    "date": 1643278969595,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={true}\n+      visible={false}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643279755835,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,16 @@\n \n import { useAuth } from \"hooks/useAuth\";\n import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n+  const auth = useAuth();\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={false}\n+      visible={true}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643279767664,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n-      visible={true}\n+      visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n             <Grid.Column>\n"
+                },
+                {
+                    "date": 1643279776658,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n-    <Sidebar.Pusher dimmed={true}>\n+    <Sidebar.Pusher dimmed={auth.user.visible}>\n       <Segment basic>\n         {children}\n       </Segment>\n     </Sidebar.Pusher>\n"
+                },
+                {
+                    "date": 1643280172688,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"scale down\"\n+      animation=\"slide out\"\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643280189062,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"slide out\"\n+      animation=\"uncover\"\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643280202131,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"uncover\"\n+      animation=\"push\"\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643280216982,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"push\"\n+      animation=\"slide along\"\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643280244720,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n   return (\n     <>\n     <Sidebar\n       as={Segment}\n-      animation=\"slide along\"\n+      animation=\"scale down\"\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n"
+                },
+                {
+                    "date": 1643280270230,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n-      direction=\"top\"\n+      direction=\"bottom\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n@@ -32,9 +32,9 @@\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n-    <Sidebar.Pusher dimmed={auth.user.visible}>\n+    <Sidebar.Pusher>\n       <Segment basic>\n         {children}\n       </Segment>\n     </Sidebar.Pusher>\n"
+                },
+                {
+                    "date": 1643280332027,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n   return (\n-    <>\n+    <Sidebar.Pushable as={segment}>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"bottom\"\n@@ -37,9 +37,9 @@\n       <Segment basic>\n         {children}\n       </Segment>\n     </Sidebar.Pusher>\n-    </>\n+    </Sidebar.Pushable>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1643280343788,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n   return (\n-    <Sidebar.Pushable as={segment}>\n+    <Sidebar.Pushable as={segment} style={{overflow: 'hidden'}}>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"bottom\"\n"
+                },
+                {
+                    "date": 1643280353598,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n   return (\n-    <Sidebar.Pushable as={segment} style={{overflow: 'hidden'}}>\n+    <Sidebar.Pushable as={Segment} style={{overflow: 'hidden'}}>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"bottom\"\n"
+                },
+                {
+                    "date": 1643280408278,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <Sidebar.Pushable as={Segment} style={{overflow: 'hidden'}}>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n-      direction=\"bottom\"\n+      direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n         <Grid.Row columns={1}>\n"
+                },
+                {
+                    "date": 1643280508928,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n   return (\n-    <Sidebar.Pushable as={Segment} style={{overflow: 'hidden'}}>\n+    <Sidebar.Pushable as={Segment} style={{overflow: 'hidden', height:'100vh'}}>\n     <Sidebar\n       as={Segment}\n       animation=\"scale down\"\n       direction=\"top\"\n"
+                },
+                {
+                    "date": 1643281540633,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n \n import { useAuth } from \"hooks/useAuth\";\n-import { Sidebar, Grid, Segment, Header } from \"semantic-ui-react\";\n+import { Sidebar, Grid, Segment, Header, Icon } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n   return (\n     <Sidebar.Pushable as={Segment} style={{overflow: 'hidden', height:'100vh'}}>\n@@ -18,9 +18,10 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Header>Message</Header>\n+              <Icon name='tasks' circular />\n+              <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n           </Grid.Column>\n"
+                },
+                {
+                    "date": 1643281566731,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='tasks' circular />\n+              <Icon name='messages' circular />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643281655240,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='messages' circular />\n+              <Icon name='copy' circular />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643281678943,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='copy' circular />\n+              <Icon name='save' circular />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643281699445,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='save' circular />\n+              <Icon name='certificate' circular />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643281756412,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='certificate' circular />\n+              <Icon name='facebook messenger' circular />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643281796691,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Icon name='facebook messenger' circular />\n+              <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Reports</Header>\n"
+                },
+                {
+                    "date": 1643282149057,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,10 @@\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n           </Grid.Column>\n           <Grid.Column>\n-              <Header>Reports</Header>\n+              <Icon name='calendar' circular size='large' />\n+              <Header as='h2' icon textAlign=\"center\">Reports</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Header>Tasks</Header>\n           </Grid.Column>\n"
+                },
+                {
+                    "date": 1643282303246,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,10 @@\n           <Grid.Column>\n               <Header>Tasks</Header>\n           </Grid.Column>\n           <Grid.Column>\n-              <Header>Employees</Header>\n+              <Icon name='calendar' circular size='large' />\n+              <Header as='h2' icon textAlign=\"center\">Employees</Header>\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n"
+                },
+                {
+                    "date": 1643282382318,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n           <Grid.Column>\n               <Header>Tasks</Header>\n           </Grid.Column>\n           <Grid.Column>\n-              <Icon name='calendar' circular size='large' />\n+              <Icon name='users' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Employees</Header>\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n"
+                },
+                {
+                    "date": 1643282473923,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,10 @@\n               <Icon name='calendar' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Reports</Header>\n           </Grid.Column>\n           <Grid.Column>\n-              <Header>Tasks</Header>\n+              <Icon name='tasks' circular size=\"large\"/>\n+              <Header as='h2' icon textAlign=\"center\">Tasks</Header>\n           </Grid.Column>\n           <Grid.Column>\n               <Icon name='users' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Employees</Header>\n"
+                },
+                {
+                    "date": 1643282509889,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-\n+import Link from 'next/link';\n import { useAuth } from \"hooks/useAuth\";\n import { Sidebar, Grid, Segment, Header, Icon } from \"semantic-ui-react\";\n const Layout = ({children}) => {\n   const auth = useAuth();\n"
+                },
+                {
+                    "date": 1643282555984,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,10 +18,12 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n+              <Link href='/message'>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n+              </Link>\n           </Grid.Column>\n           <Grid.Column>\n               <Icon name='calendar' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Reports</Header>\n"
+                },
+                {
+                    "date": 1643282594485,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,10 +19,12 @@\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n               <Link href='/message'>\n+                <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n+              </a>\n               </Link>\n           </Grid.Column>\n           <Grid.Column>\n               <Icon name='calendar' circular size='large' />\n"
+                },
+                {
+                    "date": 1643282707947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,18 +26,30 @@\n               </a>\n               </Link>\n           </Grid.Column>\n           <Grid.Column>\n+              <Link href='/reports'>\n+              <a>\n               <Icon name='calendar' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Reports</Header>\n+              </a>\n+              </Link>\n           </Grid.Column>\n           <Grid.Column>\n+              <Link href='/tasks'>\n+              <a>\n               <Icon name='tasks' circular size=\"large\"/>\n               <Header as='h2' icon textAlign=\"center\">Tasks</Header>\n+              </a>\n+              </Link>\n           </Grid.Column>\n           <Grid.Column>\n+              <Link href='/employees'>\n+              <a>\n               <Icon name='users' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Employees</Header>\n+              </a>\n+              </Link>\n           </Grid.Column>\n         </Grid.Row>\n       </Grid>\n     </Sidebar>\n"
+                },
+                {
+                    "date": 1643282728468,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,13 +11,8 @@\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n-        <Grid.Row columns={1}>\n-            <Grid.Column>\n-                <Header as='h3'>SideBar</Header>\n-            </Grid.Column>\n-        </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n               <Link href='/message'>\n                 <a>\n"
+                },
+                {
+                    "date": 1643282748197,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,13 @@\n       direction=\"top\"\n       visible={auth.user.visible}\n     >\n       <Grid textAlign=\"center\">\n+        <Grid.Row columns={1}>\n+            <Grid.Column>\n+                \n+            </Grid.Column>\n+        </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n               <Link href='/message'>\n                 <a>\n"
+                },
+                {
+                    "date": 1643283095782,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Link href='/message'>\n+              <Link href='/message' passHref>\n                 <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n               </a>\n"
+                },
+                {
+                    "date": 1643283115148,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Link href='/message' passHref>\n+              <Link href='/message' passHref={true}>\n                 <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n               </a>\n"
+                },
+                {
+                    "date": 1643283354084,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,13 @@\n             </Grid.Column>\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n-              <Link href='/message' passHref={true}>\n+              <Link \n+              href={{\n+                pathname:'/[id]/message'\n+              }} \n+              passHref={true}>\n                 <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n               </a>\n"
+                },
+                {
+                    "date": 1643283437249,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,11 +19,9 @@\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n               <Link \n-              href={{\n-                pathname:'/[id]/message'\n-              }} \n+              href='/[id]/message'\n               passHref={true}>\n                 <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n"
+                },
+                {
+                    "date": 1643283462206,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n         </Grid.Row>\n         <Grid.Row columns={4}>\n           <Grid.Column>\n               <Link \n-              href='/[id]/message'\n+              href='/[id]/'\n               passHref={true}>\n                 <a>\n               <Icon name='facebook messenger' circular size=\"large\" />\n               <Header as='h2' icon textAlign=\"center\">Message</Header>\n"
+                },
+                {
+                    "date": 1643283479718,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n               </a>\n               </Link>\n           </Grid.Column>\n           <Grid.Column>\n-              <Link href='/reports'>\n+              <Link href='/[id]/reports'>\n               <a>\n               <Icon name='calendar' circular size='large' />\n               <Header as='h2' icon textAlign=\"center\">Reports</Header>\n               </a>\n"
                 }
             ],
             "date": 1642667245663,

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 53,
+            "activePatchIndex": 55,
             "patches": [
                 {
                     "date": 1643007820100,
@@ -220,6 +220,14 @@
                 {
                     "date": 1643025579072,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,8 @@\n     case \"POST\":\n       try{\n \n         const currentUser = await User.find({email:req.body.email});\n-        console.log(currentUser);\n         if(currentUser.length){\n           return res.status(400).json({message:\"User already yet\", status: false});\n         }\n \n"
+                },
+                {
+                    "date": 1643287394465,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,28 +1,17 @@\n-import { Hash} from \"../../../lib\";\n import User from '../../../models/user.model';\n import Password from '../../../models/password.model';\n-import connectedDb from '../../../lib/mongooseConnect';\n-\n+import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n \n   const {method} = req;\n+  await dbConnect();\n   switch(method){\n \n     case \"POST\":\n       try{\n-\n-        const currentUser = await User.find({email:req.body.email});\n-        if(currentUser.length){\n-          return res.status(400).json({message:\"User already yet\", status: false});\n-        }\n-\n-        const hashPassword = await Hash(req.body.password);\n-        if(!hashPassword){\n-          return res.status(400).json({message:\"Invalid password\", status:false});\n-        }\n-        const pass = await Password.create({userPassword: hashPassword});\n-        const user = await User.create({name: req.body.name, lastname: req.body.lastname, email: req.body.email, password: pass._id});\n+        const pass = await new Password({userPassword: req.body.password, userEmail: req.body.email});\n+        const user = await new User({...req.body, password:pass._id});\n         await pass.save();\n         await user.save();\n         return res.status(200).json({message:\"User create\", status: true});\n       }catch(e){\n@@ -41,5 +30,5 @@\n }\n \n \n \n-export default connectedDb(handler);\n\\ No newline at end of file\n+export default handler;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643287422812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n-import User from '../../../models/user.model';\n-import Password from '../../../models/password.model';\n+import {User} from '../../../models/user.model';\n+import {Password} from '../../../models/password.model';\n import dbConnect from '../../../lib/mongooseConnect';\n async function handler(req, res){\n \n   const {method} = req;\n"
                 }
             ],
             "date": 1643007820100,

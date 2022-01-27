@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 15,
+            "activePatchIndex": 22,
             "patches": [
                 {
                     "date": 1643030575331,
@@ -68,6 +68,34 @@
                 {
                     "date": 1643032512455,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         password: password\n       },\n       withCredentials: true,\n     });\n-    setUser();\n+    setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n"
+                },
+                {
+                    "date": 1643279569788,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { useState, useEffect, useContext, createContext } from 'react';\n+import { useState, useContext, createContext } from 'react';\n import axios from 'axios';\n import {useRouter} from 'next/router'\n \n \n@@ -18,9 +18,8 @@\n   return useContext(authContext)\n };\n \n function useProvideAuth(){\n-  const router = useRouter();\n   const [user, setUser] = useState(null);\n \n   const signin = async (email, password) => {\n     const response = await axios({\n@@ -29,16 +28,14 @@\n       data: {\n         email: email,\n         password: password\n       },\n-      withCredentials: true,\n     });\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n     setUser(null);\n-    sessionStorage.removeItem('token');\n   }\n \n   return {\n     user,\n"
+                },
+                {
+                    "date": 1643279667303,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,11 @@\n   return useContext(authContext)\n };\n \n function useProvideAuth(){\n-  const [user, setUser] = useState(null);\n+  const [user, setUser] = useState({\n+    visible:false\n+  });\n \n   const signin = async (email, password) => {\n     const response = await axios({\n       method: \"POST\",\n@@ -35,9 +37,9 @@\n   }\n   const logout = () => {\n     setUser(null);\n   }\n-\n+  const visibleSideBar\n   return {\n     user,\n     signin,\n     logout,\n"
+                },
+                {
+                    "date": 1643279700619,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,11 @@\n   }\n   const logout = () => {\n     setUser(null);\n   }\n-  const visibleSideBar\n+  const visibleSideBar = () => {\n+    setUser({...user, visible:!user.visible})\n+  }\n   return {\n     user,\n     signin,\n     logout,\n"
+                },
+                {
+                    "date": 1643279706805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,6 +44,7 @@\n   return {\n     user,\n     signin,\n     logout,\n+    visibleSideBar\n   }\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643287817791,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,8 +19,9 @@\n };\n \n function useProvideAuth(){\n   const [user, setUser] = useState({\n+    user:null,\n     visible:false\n   });\n \n   const signin = async (email, password) => {\n"
+                },
+                {
+                    "date": 1643287857588,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n     setUser(response.data);\n     return response.data;\n   }\n   const logout = () => {\n-    setUser(null);\n+    setUser({...user, user:null});\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1643287875923,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n         email: email,\n         password: password\n       },\n     });\n-    setUser(response.data);\n+    setUser({...user, user:response.data});\n     return response.data;\n   }\n   const logout = () => {\n     setUser({...user, user:null});\n"
                 }
             ],
             "date": 1643030575331,

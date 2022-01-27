@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 19,
+            "activePatchIndex": 22,
             "patches": [
                 {
                     "date": 1642667809235,
@@ -84,6 +84,18 @@
                 {
                     "date": 1643032449164,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,8 @@\n )\n \n \n export async function getServerSideProps({req, res}){\n-  console.log(req);\n   return {\n     props:{\n       \n     }\n"
+                },
+                {
+                    "date": 1643279853802,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,12 @@\n \n \n \n const Messages =() => {\n+  const auth = useAuth()\n   return (\n     <div>\n-      <h2>Hello</h2>\n+      <button onClick={auth.visibleSideBar()}>Visible</button>\n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643279868384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Messages =() => {\n   const auth = useAuth()\n   return (\n     <div>\n-      <button onClick={auth.visibleSideBar()}>Visible</button>\n+      <button onClick={() => auth.visibleSideBar()}>Visible</button>\n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1643279885666,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Messages =() => {\n   const auth = useAuth()\n   return (\n     <div>\n-      <button onClick={() => auth.visibleSideBar()}>Visible</button>\n+      <button onClick={auth.visibleSideBar}>Visible</button>\n     </div>\n   )\n }\n \n"
                 }
             ],
             "date": 1642667809235,

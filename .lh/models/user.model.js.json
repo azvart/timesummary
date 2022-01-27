@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 9,
+            "activePatchIndex": 14,
             "patches": [
                 {
                     "date": 1642599140575,
@@ -44,6 +44,26 @@
                 {
                     "date": 1643027809645,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,8 @@\n     ref:\"passwords\"\n   }\n });\n \n-mongoose.models = {}\n \n-const User =  mongoose.model(\"users\", UserSchema);\n+const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643275883435,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,23 +4,66 @@\n const UserSchema = new Schema({\n   name:{\n     type: String,\n     required: true,\n-    index:{unique: true}\n   },\n   lastname:{\n     type:String,\n     required:true,\n-    index:{unique: true}\n   },\n   email:{\n     type: String,\n-    required: true\n+    required: [true, 'email is valid'],\n+    index:true,\n+    unique: true,\n+    dropDups: true,\n+    validate:{\n+      validator: function(v) {\n+        return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(v);\n+      },\n+      message: props => `${props.value} is not a valide email`\n+    }\n   },\n   password:{\n     type: Types.ObjectId,\n     ref:\"passwords\"\n-  }\n+  },\n+  age:{\n+    type: Number\n+  },\n+  skype:{\n+    type:String,\n+  },\n+  surname:{\n+    type:String,\n+  },\n+  role:{\n+    type:String,\n+    enum:[\"Developer\", \"Project Manager\", \"Sales\", \"Administrator\", \"Admin\"]\n+  },\n+  tasks:[{\n+    type: Types.ObjectId,\n+    ref:'tasks'\n+  }],\n+  reports:{\n+    type:Types.ObjectId,\n+    ref:'reports'\n+  },\n+  phone:{\n+    type:String,\n+  },\n+  working_at:{\n+    type: Date\n+  },\n+  token:{\n+    type: Types.ObjectId,\n+    ref: 'tokens'\n+  },\n+\n+}, \n+{\n+  versionKey: false,\n+  validateBeforeSave: true,\n });\n \n \n const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n"
+                },
+                {
+                    "date": 1643275893535,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,10 @@\n     type:String,\n   },\n   role:{\n     type:String,\n-    enum:[\"Developer\", \"Project Manager\", \"Sales\", \"Administrator\", \"Admin\"]\n+    enum:[\"Developer\", \"Project Manager\", \"Sales\", \"Administrator\", \"Admin\"],\n+    default:\"Developer\"\n   },\n   tasks:[{\n     type: Types.ObjectId,\n     ref:'tasks'\n"
+                },
+                {
+                    "date": 1643285690150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -66,7 +66,7 @@\n   validateBeforeSave: true,\n });\n \n \n-const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n+const User =  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643285849293,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -66,7 +66,7 @@\n   validateBeforeSave: true,\n });\n \n \n-const User =  mongoose.model(\"users\", UserSchema);\n+const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643287228852,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -66,7 +66,6 @@\n   validateBeforeSave: true,\n });\n \n \n-const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n+export const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n \n\\ No newline at end of file\n-export default User;\n"
                 }
             ],
             "date": 1642599140575,
