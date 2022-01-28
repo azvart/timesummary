@@ -10,7 +10,7 @@ const Employees = ({user = []}) => {
 
         return (
           <Card>
-            <Image src='/photo.svg' alt='' width={290} height={290} />
+            <Image src='/user.svg' alt='' width={290} height={50} />
             <Card.Content>
               <Card.Header>{item.name} {item.lastname}</Card.Header>
               <Card.Meta>

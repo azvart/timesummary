@@ -21,7 +21,6 @@ const Layout = ({children}) => {
           <Grid.Column>
               <Link 
               href={`/${auth.user.id}/`}
-              >
                 <a>
               <Icon name='facebook messenger' circular size="large" />
               <Header as='h2' icon textAlign="center">Message</Header>
@@ -59,6 +58,7 @@ const Layout = ({children}) => {
       <Segment basic>
         <div>
         <Menu pointing secondary size='massive'>
+          <Menu.Item name='Profile' />
           <Menu.Menu position='right'>
             <Menu.Item name='navigate' onClick={auth.visibleSideBar} />
             <Menu.Item name='logout' onClick={auth.logout} />

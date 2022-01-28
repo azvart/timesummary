@@ -1,16 +1,7 @@
 import User from '../../../models/user.model';
 import dbConnect from '../../../lib/mongooseConnect';
 
-/**
- * 
- * @swagger 
- * /api/user/all:
- *    get:
- *        description: Return all users
- *        responses:
- *          200:
- *             description: Array
- */
+
 
 
 async function handler(req, res){

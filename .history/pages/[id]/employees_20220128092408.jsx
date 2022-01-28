@@ -1,7 +1,7 @@
 import Layout from '../../Layout/index';
 import axios from 'axios';
-import { Card, Icon} from 'semantic-ui-react';
-import Image from 'next/image';
+import { Card, Icon } from 'semantic-ui-react';
+
 
 const Employees = ({user = []}) => {
   return (
@@ -10,7 +10,6 @@ const Employees = ({user = []}) => {
 
         return (
           <Card>
-            <Image src='/photo.svg' alt='' width={290} height={290} />
             <Card.Content>
               <Card.Header>{item.name} {item.lastname}</Card.Header>
               <Card.Meta>

@@ -1,12 +1,12 @@
 import Layout from '../../Layout/index';
-import { Table } from 'semantic-ui-react';
+import { Tab, Table } from 'semantic-ui-react';
 
 
 
 
 const Reports = () => {
   return (
-    <Table celled inverted selectable>
+    <Table celled inverted selectable size='large'>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell> Дата </Table.HeaderCell>

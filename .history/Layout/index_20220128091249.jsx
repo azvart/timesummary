@@ -59,7 +59,6 @@ const Layout = ({children}) => {
       <Segment basic>
         <div>
         <Menu pointing secondary size='massive'>
-          <Menu.Menu position='right'>
             <Menu.Item name='navigate' onClick={auth.visibleSideBar} />
             <Menu.Item name='logout' onClick={auth.logout} />
           </Menu.Menu>

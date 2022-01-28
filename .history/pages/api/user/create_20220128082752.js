@@ -1,23 +1,6 @@
 import User from '../../../models/user.model';
 import Password from '../../../models/password.model';
 import dbConnect from '../../../lib/mongooseConnect';
-
-
-/**
- * 
- * @swagger
- *  /api/user/create:
- *      post:
- *          description: Create new user
- *          responses:
- *                 200:
- *                    description: Object
- *                                                    
- */       
-
-
-
-
 async function handler(req, res){
 
   const {method} = req;

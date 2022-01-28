@@ -1,5 +1,5 @@
 import Layout from '../../Layout/index';
-import { Table } from 'semantic-ui-react';
+import { Tab, Table } from 'semantic-ui-react';
 
 
 

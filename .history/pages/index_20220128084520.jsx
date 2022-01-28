@@ -17,9 +17,7 @@ const Home = () => {
     setForm({...form, [name]:value})
   }
   useEffect(() => {
-    if(auth.user.id){
-      router.push(`/${auth.user.id}`);
-    }
+    console.log(auth.user.id)
   },[auth]);
   return (
     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>

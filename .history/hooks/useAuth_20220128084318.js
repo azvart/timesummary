@@ -33,7 +33,7 @@ function useProvideAuth(){
       },
     });
     setUser({...user, ...response.data});
-    sessionStorage.setItem('token', response.data.token);
+    sessionStorage.setItem('token', user.token);
     return response.data;
   }
   const logout = () => {

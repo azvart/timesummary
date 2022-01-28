@@ -1,5 +1,6 @@
 import { useState, useContext, createContext } from 'react';
 import axios from 'axios';
+import {useRouter} from 'next/router'
 
 
 const authContext = createContext();
@@ -33,7 +34,6 @@ function useProvideAuth(){
       },
     });
     setUser({...user, ...response.data});
-    sessionStorage.setItem('token', response.data.token);
     return response.data;
   }
   const logout = () => {

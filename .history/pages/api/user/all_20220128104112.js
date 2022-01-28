@@ -4,7 +4,7 @@ import dbConnect from '../../../lib/mongooseConnect';
 /**
  * 
  * @swagger 
- * /api/user/all:
+ * /api/all:
  *    get:
  *        description: Return all users
  *        responses:

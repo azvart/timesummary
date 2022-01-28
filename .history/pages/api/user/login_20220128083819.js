@@ -16,7 +16,7 @@ async function handler(req, res){
      if(compare !== true){
        return res.status(400).json({message:"Invalid password", status: false});
      }
-     const token = jwt.sign({data: user.email}, process.env.SECRET, {expiresIn: Math.floor(Date.now() / 1000) + (60 * 60)});
+     const token = jwt.sign({data: user.email}, process.env.SECRET, {algorithm:"RS256", expiresIn: Math.floor(Date.now() / 1000) + (60 * 60)});
      return res.status(200).json({message:"OK", status: true, id: user._id, role: user.role, token: token});
     }
     default:

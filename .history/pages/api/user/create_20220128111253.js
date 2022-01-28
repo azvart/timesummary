@@ -11,8 +11,12 @@ import dbConnect from '../../../lib/mongooseConnect';
  *          description: Create new user
  *          responses:
  *                 200:
- *                    description: Object
- *                                                    
+ *                    description: {
+ *                          message:"string", 
+ *                          status:"boolean", 
+ *                          
+ *                                        
+ *                              }
  */       
 
 
