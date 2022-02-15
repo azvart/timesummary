@@ -1,0 +1,6 @@
+- in: "/api/user/login"
+  name: login user
+  description: 
+  required: false
+  schema:
+    type: string

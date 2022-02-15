@@ -1,0 +1,54 @@
+{
+    "sourceFile": "config/index.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 9,
+            "patches": [
+                {
+                    "date": 1644824567711,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644824575032,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,4 +4,7 @@\n   baseURL:'http://localhost:3000',\n   withCredentials: true\n })\n \n+\n+export default API;\n+\n"
+                },
+                {
+                    "date": 1644827616451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,12 @@\n import axios from 'axios';\n \n const API = axios.create({\n   baseURL:'http://localhost:3000',\n-  withCredentials: true\n+  withCredentials: true,\n+  transformResponseL:[(data) => {\n+    return data;\n+  }]\n })\n \n \n export default API;\n"
+                },
+                {
+                    "date": 1644827668644,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n const API = axios.create({\n   baseURL:'http://localhost:3000',\n   withCredentials: true,\n   transformResponseL:[(data) => {\n-    return data;\n+    return data.data;\n   }]\n })\n \n \n"
+                },
+                {
+                    "date": 1644827695689,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n const API = axios.create({\n   baseURL:'http://localhost:3000',\n   withCredentials: true,\n   transformResponseL:[(data) => {\n-    return data.data;\n+    return data\n   }]\n })\n \n \n"
+                },
+                {
+                    "date": 1644827775688,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,7 +7,11 @@\n     return data\n   }]\n })\n \n+API.interceptors.request.use((config) => {\n+  console.log(config);\n+  return config;\n+})\n \n export default API;\n \n"
+                },
+                {
+                    "date": 1644827861701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,11 +7,7 @@\n     return data\n   }]\n })\n \n-API.interceptors.request.use((config) => {\n-  console.log(config);\n-  return config;\n-})\n \n export default API;\n \n"
+                },
+                {
+                    "date": 1644827966794,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,7 +7,11 @@\n     return data\n   }]\n })\n \n+API.interceptors.request.use((config) => {\n+  console.log(config);\n+  return config;\n+})\n \n export default API;\n \n"
+                },
+                {
+                    "date": 1644827974277,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   }]\n })\n \n API.interceptors.request.use((config) => {\n-  console.log(config);\n+  console.log(\"config\",config);\n   return config;\n })\n \n export default API;\n"
+                },
+                {
+                    "date": 1644830677755,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,11 +7,7 @@\n     return data\n   }]\n })\n \n-API.interceptors.request.use((config) => {\n-  console.log(\"config\",config);\n-  return config;\n-})\n \n export default API;\n \n"
+                }
+            ],
+            "date": 1644824567711,
+            "name": "Commit-0",
+            "content": "import axios from 'axios';\n\nconst API = axios.create({\n  baseURL:'http://localhost:3000',\n  withCredentials: true\n})\n\n"
+        }
+    ]
+}

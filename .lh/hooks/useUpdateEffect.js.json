@@ -1,0 +1,18 @@
+{
+    "sourceFile": "hooks/useUpdateEffect.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1644831085699,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1644831085699,
+            "name": "Commit-0",
+            "content": "import { useEffect } from 'react';\nimport useFirstRender from './useFirstRender';\n\n\nfunction useUpdateEffect(effect, deps){\n  const isFirst = useFirstRender();\n\n  useEffect(() => {\n    if(!isFirst){\n      return effect();\n    }\n  },deps);\n}\n\n\nexport default useUpdateEffect;"
+        }
+    ]
+}

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 14,
+            "activePatchIndex": 24,
             "patches": [
                 {
                     "date": 1642599140575,
@@ -64,6 +64,46 @@
                 {
                     "date": 1643287228852,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -66,7 +66,6 @@\n   validateBeforeSave: true,\n });\n \n \n-const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n+export const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n \n\\ No newline at end of file\n-export default User;\n"
+                },
+                {
+                    "date": 1644838211428,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,10 @@\n     }\n   },\n   password:{\n     type: Types.ObjectId,\n-    ref:\"passwords\"\n+    ref:\"passwords\",\n+    immutable: true\n   },\n   age:{\n     type: Number\n   },\n@@ -65,6 +66,8 @@\n   versionKey: false,\n   validateBeforeSave: true,\n });\n \n+mongoose.models = {}\n+const User =  mongoose.model(\"users\", UserSchema);\n \n-export const User = mongoose.models.users ||  mongoose.model(\"users\", UserSchema);\n+export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644838227584,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,8 @@\n   },\n   password:{\n     type: Types.ObjectId,\n     ref:\"passwords\",\n-    immutable: true\n   },\n   age:{\n     type: Number\n   },\n"
+                },
+                {
+                    "date": 1644840953331,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,10 +23,10 @@\n       message: props => `${props.value} is not a valide email`\n     }\n   },\n   password:{\n-    type: Types.ObjectId,\n-    ref:\"passwords\",\n+    type: String,\n+    required: true\n   },\n   age:{\n     type: Number\n   },\n"
+                },
+                {
+                    "date": 1644841302592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import mongoose, { Schema, Types } from 'mongoose';\n-\n-\n+import jwt from 'jsonwebtoken';\n+import Token from './token.model';\n const UserSchema = new Schema({\n   name:{\n     type: String,\n     required: true,\n@@ -65,8 +65,45 @@\n   versionKey: false,\n   validateBeforeSave: true,\n });\n \n+\n+UserSchema.methods = {\n+  createAccessToken : async function(){\n+    try{\n+      const  { _id, name } = this;\n+      const accessToken = jwt.sign(\n+        {user: {_id, name}},\n+        process.env.SECRET,\n+        {\n+          expiresIn: \"10m\"\n+        }\n+      );\n+      return accessToken;\n+    }catch(error){\n+      console.error(error);\n+      return;\n+    }\n+  },\n+  createReffreshToken: async function(){\n+    try{\n+      const { _id, name } = this;\n+      const refreshToken = jwt.sign(\n+        {user: { _id, name }},\n+        process.env.REFRESH_SECRET,\n+        {\n+          expiresIn: \"1d\"        \n+        }\n+      );\n+      await new Token({token: refreshToken}).save();\n+      return refreshToken;\n+    }catch(e){\n+      console.error(e);\n+      return;\n+    }\n+  }\n+}\n+\n mongoose.models = {}\n const User =  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644841367643,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -102,8 +102,16 @@\n     }\n   }\n }\n \n+UserSchema.pre(\"save\", async function(next){\n+  try{\n+    \n+  }catch(e){\n+    console.error(e);\n+  }\n+  return next();\n+})\n mongoose.models = {}\n const User =  mongoose.model(\"users\", UserSchema);\n \n export default User;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644841384462,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import mongoose, { Schema, Types } from 'mongoose';\n import jwt from 'jsonwebtoken';\n+import bcrypt from 'bcryptjs'\n import Token from './token.model';\n const UserSchema = new Schema({\n   name:{\n     type: String,\n@@ -104,9 +105,9 @@\n }\n \n UserSchema.pre(\"save\", async function(next){\n   try{\n-    \n+\n   }catch(e){\n     console.error(e);\n   }\n   return next();\n"
+                },
+                {
+                    "date": 1644841406158,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import mongoose, { Schema, Types } from 'mongoose';\n import jwt from 'jsonwebtoken';\n-import bcrypt from 'bcryptjs'\n+import { hash } from 'bcryptjs'\n import Token from './token.model';\n const UserSchema = new Schema({\n   name:{\n     type: String,\n"
+                },
+                {
+                    "date": 1644841471501,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import mongoose, { Schema, Types } from 'mongoose';\n import jwt from 'jsonwebtoken';\n-import { hash } from 'bcryptjs'\n+import bcrypt, { hash } from 'bcryptjs'\n import Token from './token.model';\n const UserSchema = new Schema({\n   name:{\n     type: String,\n@@ -105,9 +105,11 @@\n }\n \n UserSchema.pre(\"save\", async function(next){\n   try{\n-\n+    const salt = await bcrypt.genSalt(12);\n+    const hashedPassword = await hash(this.password, salt)\n+    this.password = hashedPassword;\n   }catch(e){\n     console.error(e);\n   }\n   return next();\n"
+                },
+                {
+                    "date": 1644841780149,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -70,11 +70,11 @@\n \n UserSchema.methods = {\n   createAccessToken : async function(){\n     try{\n-      const  { _id, name } = this;\n+      const  { _id, email } = this;\n       const accessToken = jwt.sign(\n-        {user: {_id, name}},\n+        {user: {_id, email}},\n         process.env.SECRET,\n         {\n           expiresIn: \"10m\"\n         }\n@@ -86,11 +86,11 @@\n     }\n   },\n   createReffreshToken: async function(){\n     try{\n-      const { _id, name } = this;\n+      const { _id, email } = this;\n       const refreshToken = jwt.sign(\n-        {user: { _id, name }},\n+        {user: { _id, email }},\n         process.env.REFRESH_SECRET,\n         {\n           expiresIn: \"1d\"        \n         }\n"
+                },
+                {
+                    "date": 1644842323002,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -84,9 +84,9 @@\n       console.error(error);\n       return;\n     }\n   },\n-  createReffreshToken: async function(){\n+  createRefreshToken: async function(){\n     try{\n       const { _id, email } = this;\n       const refreshToken = jwt.sign(\n         {user: { _id, email }},\n"
                 }
             ],
             "date": 1642599140575,

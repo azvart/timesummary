@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 22,
+            "activePatchIndex": 41,
             "patches": [
                 {
                     "date": 1642667809235,
@@ -96,6 +96,82 @@
                 {
                     "date": 1643279885666,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Messages =() => {\n   const auth = useAuth()\n   return (\n     <div>\n-      <button onClick={() => auth.visibleSideBar()}>Visible</button>\n+      <button onClick={auth.visibleSideBar}>Visible</button>\n     </div>\n   )\n }\n \n"
+                },
+                {
+                    "date": 1644822537664,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,15 @@\n import Layout from '../../Layout/index';\n import { useAuth } from '../../hooks/useAuth';\n+import { Grid, Button } from 'semantic-ui-react';\n+import { withSessionSSR } from '../../lib/sessionsWrappers';\n \n-\n-\n const Messages =() => {\n   const auth = useAuth()\n   return (\n-    <div>\n-      <button onClick={auth.visibleSideBar}>Visible</button>\n-    </div>\n+   <>\n+   \n+   </>\n   )\n }\n \n \n"
+                },
+                {
+                    "date": 1644822627744,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,14 +19,24 @@\n   </Layout>\n )\n \n \n-export async function getServerSideProps({req, res}){\n-  return {\n-    props:{\n+// export async function getServerSideProps({req, res}){\n+//   return {\n+//     props:{\n       \n+//     }\n+//   }\n+// }\n+\n+export const getServerSideProps = withSessionSSR(\n+  async function getServerSideProps({req}){\n+\n+    return {\n+      props:{\n+        user: req.session.user\n+      }\n     }\n   }\n-}\n+)\n \n-\n export default Messages;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644832984899,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,16 +19,8 @@\n   </Layout>\n )\n \n \n-// export async function getServerSideProps({req, res}){\n-//   return {\n-//     props:{\n-      \n-//     }\n-//   }\n-// }\n-\n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n \n     return {\n"
+                },
+                {
+                    "date": 1644832990882,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n \n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n-\n+    \n     return {\n       props:{\n         user: req.session.user\n       }\n"
+                },
+                {
+                    "date": 1644833002735,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import Layout from '../../Layout/index';\n import { useAuth } from '../../hooks/useAuth';\n import { Grid, Button } from 'semantic-ui-react';\n import { withSessionSSR } from '../../lib/sessionsWrappers';\n-\n+import jwt from 'jsonwebtoken';\n const Messages =() => {\n   const auth = useAuth()\n   return (\n    <>\n@@ -21,9 +21,9 @@\n \n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n-    \n+\n     return {\n       props:{\n         user: req.session.user\n       }\n"
+                },
+                {
+                    "date": 1644833123700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,11 @@\n \n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n-\n+    const token = req.session.user;\n+    const decode = jwt.decode(token, process.env.SECRET);\n+    console.log(decode);\n     return {\n       props:{\n         user: req.session.user\n       }\n"
+                },
+                {
+                    "date": 1644833150968,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,8 @@\n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n     const token = req.session.user;\n     const decode = jwt.decode(token, process.env.SECRET);\n-    console.log(decode);\n     return {\n       props:{\n         user: req.session.user\n       }\n"
+                },
+                {
+                    "date": 1644837813583,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,8 +22,9 @@\n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n     const token = req.session.user;\n+    console.log(req.query)\n     const decode = jwt.decode(token, process.env.SECRET);\n     return {\n       props:{\n         user: req.session.user\n"
+                },
+                {
+                    "date": 1644837825209,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n     const token = req.session.user;\n-    console.log(req.query)\n+    console.log(req)\n     const decode = jwt.decode(token, process.env.SECRET);\n     return {\n       props:{\n         user: req.session.user\n"
+                },
+                {
+                    "date": 1644837846022,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req}){\n     const token = req.session.user;\n-    console.log(req)\n+    console.log(req.params)\n     const decode = jwt.decode(token, process.env.SECRET);\n     return {\n       props:{\n         user: req.session.user\n"
+                },
+                {
+                    "date": 1644837873726,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n )\n \n \n export const getServerSideProps = withSessionSSR(\n-  async function getServerSideProps({req}){\n+  async function getServerSideProps({req, params}){\n     const token = req.session.user;\n     console.log(req.params)\n     const decode = jwt.decode(token, process.env.SECRET);\n     return {\n"
+                },
+                {
+                    "date": 1644837927306,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req, params}){\n     const token = req.session.user;\n-    console.log(req.params)\n+    const { id } = params;\n     const decode = jwt.decode(token, process.env.SECRET);\n     return {\n       props:{\n         user: req.session.user\n"
+                },
+                {
+                    "date": 1644837970947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,10 @@\n import { useAuth } from '../../hooks/useAuth';\n import { Grid, Button } from 'semantic-ui-react';\n import { withSessionSSR } from '../../lib/sessionsWrappers';\n import jwt from 'jsonwebtoken';\n+import User from '../../models/user.model';\n+import Password from '../../models/password.model';\n const Messages =() => {\n   const auth = useAuth()\n   return (\n    <>\n"
+                },
+                {
+                    "date": 1644838005091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n import { withSessionSSR } from '../../lib/sessionsWrappers';\n import jwt from 'jsonwebtoken';\n import User from '../../models/user.model';\n import Password from '../../models/password.model';\n+import dbConnect from '../../lib/mongooseConnect';\n const Messages =() => {\n   const auth = useAuth()\n   return (\n    <>\n"
+                },
+                {
+                    "date": 1644838078281,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,11 +24,22 @@\n \n \n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req, params}){\n+    await dbConnect();\n     const token = req.session.user;\n+    if(!token){\n+      return {\n+        props:{},\n+        redirect:{\n+          destination:'/',\n+          permanent: true\n+        }\n+      }\n+    }\n     const { id } = params;\n     const decode = jwt.decode(token, process.env.SECRET);\n+\n     return {\n       props:{\n         user: req.session.user\n       }\n"
+                },
+                {
+                    "date": 1644838086730,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,9 @@\n export const getServerSideProps = withSessionSSR(\n   async function getServerSideProps({req, params}){\n     await dbConnect();\n     const token = req.session.user;\n+    const { id } = params;\n     if(!token){\n       return {\n         props:{},\n         redirect:{\n@@ -35,9 +36,9 @@\n           permanent: true\n         }\n       }\n     }\n-    const { id } = params;\n+\n     const decode = jwt.decode(token, process.env.SECRET);\n \n     return {\n       props:{\n"
+                },
+                {
+                    "date": 1644838123001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,11 @@\n import { useAuth } from '../../hooks/useAuth';\n import { Grid, Button } from 'semantic-ui-react';\n import { withSessionSSR } from '../../lib/sessionsWrappers';\n import jwt from 'jsonwebtoken';\n+import dbConnect from '../../lib/mongooseConnect';\n import User from '../../models/user.model';\n import Password from '../../models/password.model';\n-import dbConnect from '../../lib/mongooseConnect';\n const Messages =() => {\n   const auth = useAuth()\n   return (\n    <>\n"
+                },
+                {
+                    "date": 1644838231746,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,8 @@\n import { Grid, Button } from 'semantic-ui-react';\n import { withSessionSSR } from '../../lib/sessionsWrappers';\n import jwt from 'jsonwebtoken';\n import dbConnect from '../../lib/mongooseConnect';\n-import User from '../../models/user.model';\n-import Password from '../../models/password.model';\n const Messages =() => {\n   const auth = useAuth()\n   return (\n    <>\n"
+                },
+                {
+                    "date": 1644838274003,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n       return {\n         props:{},\n         redirect:{\n           destination:'/',\n-          permanent: true\n+          permanent: false\n         }\n       }\n     }\n \n"
                 }
             ],
             "date": 1642667809235,

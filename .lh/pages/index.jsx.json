@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 103,
+            "activePatchIndex": 105,
             "patches": [
                 {
                     "date": 1642671170808,
@@ -420,6 +420,14 @@
                 {
                     "date": 1643288074444,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,13 +15,13 @@\n   const handleChange = (event) => {\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n-  // useEffect(() => {\n-  //   if(auth.user !== null){\n-  //     router.replace(`/${auth.user._id}`)\n-  //   }\n-  // },[auth])\n+  useEffect(() => {\n+    if(auth.user.user !== null){\n+      router.replace(`/${auth.user._id}`)\n+    }\n+  },[auth])\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n"
+                },
+                {
+                    "date": 1644836721812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,12 +16,14 @@\n     const {name, value} = event.target;\n     setForm({...form, [name]:value})\n   }\n   useEffect(() => {\n-    if(auth.user.user !== null){\n-      router.replace(`/${auth.user._id}`)\n+    if(auth.user.id){\n+      router.push(`/${auth.user.id}`);\n+    }else{\n+      router.push('/')\n     }\n-  },[auth])\n+  },[auth]);\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n       <Grid.Column style={{maxWidth: 450}}>\n         <Header as='h2' color='teal' textAlign='center'>\n"
+                },
+                {
+                    "date": 1644836737419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,10 +18,8 @@\n   }\n   useEffect(() => {\n     if(auth.user.id){\n       router.push(`/${auth.user.id}`);\n-    }else{\n-      router.push('/')\n     }\n   },[auth]);\n   return (\n     <Grid textAlign='center' style={{height: '100vh', margin: '0em'}} verticalAlign='middle' className='login-container'>\n"
                 }
             ],
             "date": 1642671170808,

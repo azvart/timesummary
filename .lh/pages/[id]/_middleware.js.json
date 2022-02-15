@@ -1,0 +1,50 @@
+{
+    "sourceFile": "pages/[id]/_middleware.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1644846357725,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644846366765,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(req);\n+  console.log(\"middleware user\",req);\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644846497938,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(\"middleware user\",req);\n+  console.log(\"middleware user\",req.headers);\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644846543752,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(\"middleware user\",req.headers);\n+  console.log(\"middleware user\",req.headers('cookie'));\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644846557526,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(\"middleware user\",req.headers('cookie'));\n+  console.log(\"middleware user\",req.headers.get('cookie'));\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644846613989,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(\"middleware user\",req.headers.get('cookie'));\n+  console.log(\"middleware user\",req.headers.get('x-auth'));\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644846634547,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n async function middleware(req, ev){\n-  console.log(\"middleware user\",req.headers.get('x-auth'));\n+  console.log(\"middleware user\",req.headers.get('x-auth-acces'));\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644847487754,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n async function middleware(req, ev){\n   console.log(\"middleware user\",req.headers.get('x-auth-acces'));\n+  return req;\n }\n \n \n \n"
+                },
+                {
+                    "date": 1644847494672,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n async function middleware(req, ev){\n   console.log(\"middleware user\",req.headers.get('x-auth-acces'));\n-  return req;\n }\n \n \n \n"
+                }
+            ],
+            "date": 1644846357725,
+            "name": "Commit-0",
+            "content": "async function middleware(req, ev){\n  console.log(req);\n}\n\n\n\nexport default middleware;"
+        }
+    ]
+}

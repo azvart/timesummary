@@ -1,0 +1,18 @@
+{
+    "sourceFile": "pages/api/user/all.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1644820909904,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1644820909904,
+            "name": "Commit-0",
+            "content": "import User from '../../../models/user.model';\nimport dbConnect from '../../../lib/mongooseConnect';\n\n\n\nasync function handler(req, res){\n\n  const {method} = req;\n  await dbConnect();\n  switch(method){\n\n    case \"GET\":\n      {\n\n        const users  = await User.find({}).exec();\n\n        return res.status(200).json({users});\n      }\n\n\n    default:\n      return res.status(400).json({message:\"Invalid method\", status: false});\n  }\n\n\n\n}\n\n\n\n\n\nexport default handler;\n\n\n\n/**\n * \n * @swagger \n * /api/user/all:\n *   get:\n *      description: Get all users from database\n *      produces:\n *          -application/json\n *      responses:\n *          200:\n *              description: Responses Array of objects\n */\n"
+        }
+    ]
+}

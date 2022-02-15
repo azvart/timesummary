@@ -1,0 +1,22 @@
+{
+    "sourceFile": "models/token.model.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1644841258830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644841316182,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,21 +4,8 @@\n const TokenSchema = new Schema({\n   token:{\n     type:String,\n     required:true,\n-  },\n-  expires:{\n-    type: Date\n-  },\n-  isExpired:{\n-    type: Boolean,\n-  },\n-  created:{\n-    type:Date,\n-    default: Date.now,\n-  },\n-  isActive:{\n-    type: Boolean\n   }\n \n },{versionKey:false});\n \n"
+                }
+            ],
+            "date": 1644841258830,
+            "name": "Commit-0",
+            "content": "import mongoose, {Types, model, models, Schema} from 'mongoose';\n\n\nconst TokenSchema = new Schema({\n  token:{\n    type:String,\n    required:true,\n  },\n  expires:{\n    type: Date\n  },\n  isExpired:{\n    type: Boolean,\n  },\n  created:{\n    type:Date,\n    default: Date.now,\n  },\n  isActive:{\n    type: Boolean\n  }\n\n},{versionKey:false});\n\n\n\nmongoose.models = {};\nconst Token = models.token || model(\"token\", TokenSchema);\n\nexport default Token;"
+        }
+    ]
+}

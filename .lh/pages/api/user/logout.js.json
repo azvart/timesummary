@@ -1,0 +1,66 @@
+{
+    "sourceFile": "pages/api/user/logout.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 12,
+            "patches": [
+                {
+                    "date": 1644821371868,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644821581720,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,16 @@\n-import { withIronSessionApiRoute } from \"iron-session/next\";\n\\ No newline at end of file\n+import { withIronSessionApiRoute } from \"iron-session/next\";\n+\n+\n+export default withIronSessionApiRoute(\n+  function handler(req,res, session){\n+    res.session.destroy();\n+    res.status(200).json({message:\"Logout\", status: true});\n+  },\n+  {\n+    cookieName: \"user session\",\n+    password:\"33773377337733773377337733773377\",\n+    cookieOptions:{\n+      secure: process.env.SECRET\n+    }\n+  }\n+)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644821969458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,8 @@\n-import { withIronSessionApiRoute } from \"iron-session/next\";\n+import { withSessionRoute } from '../../../lib/sessionsWrappers';\n \n+export default withSessionRoute(handler);\n \n-export default withIronSessionApiRoute(\n   function handler(req,res, session){\n     res.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n-  },\n-  {\n-    cookieName: \"user session\",\n-    password:\"33773377337733773377337733773377\",\n-    cookieOptions:{\n-      secure: process.env.SECRET\n-    }\n\\ No newline at end of file\n-  }\n-)\n+  };\n"
+                },
+                {
+                    "date": 1644821988612,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { withSessionRoute } from '../../../lib/sessionsWrappers';\n \n export default withSessionRoute(handler);\n \n-  function handler(req,res, session){\n+async function handler(req,res, session){\n     res.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n-  };\n+};\n"
+                },
+                {
+                    "date": 1644824417655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,7 +2,7 @@\n \n export default withSessionRoute(handler);\n \n async function handler(req,res, session){\n-    res.session.destroy();\n+    req.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n };\n"
+                },
+                {
+                    "date": 1644826096224,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,7 +2,8 @@\n \n export default withSessionRoute(handler);\n \n async function handler(req,res, session){\n+    console.log(req.headers);\n     req.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n };\n"
+                },
+                {
+                    "date": 1644826317647,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,7 @@\n \n export default withSessionRoute(handler);\n \n async function handler(req,res, session){\n-    console.log(req.headers);\n     req.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n };\n"
+                },
+                {
+                    "date": 1644833614029,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,4 +5,17 @@\n async function handler(req,res, session){\n     req.session.destroy();\n     res.status(200).json({message:\"Logout\", status: true});\n };\n+\n+\n+/**\n+ * @swagger\n+ * /api/user/logout\n+ *  get:\n+ *     description: Destroy user session\n+ *     tags:[User]\n+ *     summary: Destroy user session and redirect\n+ *     responses:\n+ *          200:\n+ *             descriptions: when you destroy you take a message and status\n+ */\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644833652726,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n \n \n /**\n  * @swagger\n- * /api/user/logout\n+ * /api/user/logout:\n  *  get:\n  *     description: Destroy user session\n  *     tags:[User]\n  *     summary: Destroy user session and redirect\n"
+                },
+                {
+                    "date": 1644833680012,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,12 +10,12 @@\n \n /**\n  * @swagger\n  * /api/user/logout:\n- *  get:\n- *     description: Destroy user session\n- *     tags:[User]\n- *     summary: Destroy user session and redirect\n- *     responses:\n- *          200:\n- *             descriptions: when you destroy you take a message and status\n+ *      get:\n+ *          description: Destroy user session\n+ *          tags:[User]\n+ *          summary: Destroy user session and redirect\n+ *          responses:\n+ *                  200:\n+ *                  descriptions: when you destroy you take a message and status\n  */\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644833721527,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,12 +10,13 @@\n \n /**\n  * @swagger\n  * /api/user/logout:\n- *      get:\n- *          description: Destroy user session\n- *          tags:[User]\n- *          summary: Destroy user session and redirect\n- *          responses:\n- *                  200:\n- *                  descriptions: when you destroy you take a message and status\n+ *   get:\n+ *     description: Destroy user session\n+ *     tags: [User]\n+ *     summary:  Destroy user session\n+                            \n+ *     responses:\n+ *       201:\n+ *         description: Responses id, role and token\n  */\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644845228564,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,19 @@\n import { withSessionRoute } from '../../../lib/sessionsWrappers';\n-\n+import Token from '../../../models/token.model';\n export default withSessionRoute(handler);\n \n async function handler(req,res, session){\n-    req.session.destroy();\n-    res.status(200).json({message:\"Logout\", status: true});\n+    try{\n+        const { refreshToken } = req.body;\n+        await Token.findOneAndDelete({token: refreshToken});\n+        req.session.destroy();\n+        return res.status(200).json({message:\"Logout\", status: true});\n+    }catch(e){\n+        console.error(e);\n+        return res.status(500).json({message:\"Server Error\", status: false, error: e});\n+    }\n+    \n };\n \n \n /**\n"
+                },
+                {
+                    "date": 1644845429062,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,12 @@\n import { withSessionRoute } from '../../../lib/sessionsWrappers';\n import Token from '../../../models/token.model';\n+import dbConnect from '../../../lib/mongooseConnect';\n export default withSessionRoute(handler);\n \n async function handler(req,res, session){\n     try{\n+        await dbConnect();\n         const { refreshToken } = req.body;\n         await Token.findOneAndDelete({token: refreshToken});\n         req.session.destroy();\n         return res.status(200).json({message:\"Logout\", status: true});\n"
+                }
+            ],
+            "date": 1644821371868,
+            "name": "Commit-0",
+            "content": "import { withIronSessionApiRoute } from \"iron-session/next\";"
+        }
+    ]
+}

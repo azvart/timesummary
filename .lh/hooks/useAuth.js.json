@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 22,
+            "activePatchIndex": 90,
             "patches": [
                 {
                     "date": 1643030575331,
@@ -96,6 +96,278 @@
                 {
                     "date": 1643287875923,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n         email: email,\n         password: password\n       },\n     });\n-    setUser(response.data);\n+    setUser({...user, user:response.data});\n     return response.data;\n   }\n   const logout = () => {\n     setUser({...user, user:null});\n"
+                },
+                {
+                    "date": 1644824305216,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n-import { useState, useContext, createContext } from 'react';\n+import { useState, useContext, createContext, useEffect } from 'react';\n import axios from 'axios';\n-import {useRouter} from 'next/router'\n \n \n const authContext = createContext();\n \n@@ -20,11 +19,28 @@\n \n function useProvideAuth(){\n   const [user, setUser] = useState({\n     user:null,\n-    visible:false\n+    visible:false,\n+    roleVisible:false\n   });\n-\n+  useEffect(() => {\n+    const token = sessionStorage.getItem('token');\n+    if(!user.id && !user.token && token ){\n+      axios({\n+        url:'http://localhost:3000/api/user/auth',\n+        method:'get',\n+        headers:{\n+          authorization: token\n+        }\n+      }).then((response) => {\n+        setUser({...user, ...response.data});\n+      }).catch((error) => {\n+        sessionStorage.removeItem('token');\n+        console.error(error);\n+      })\n+    }\n+  },[user]);\n   const signin = async (email, password) => {\n     const response = await axios({\n       method: \"POST\",\n       url: \"http://localhost:3000/api/user/login\",\n@@ -32,20 +48,30 @@\n         email: email,\n         password: password\n       },\n     });\n-    setUser({...user, user:response.data});\n+    setUser({...user, ...response.data});\n+    sessionStorage.setItem('token', response.data.token);\n     return response.data;\n   }\n   const logout = () => {\n-    setUser({...user, user:null});\n+    sessionStorage.removeItem('token');\n+    setUser({...user, id:null, token:null});\n+    await axios({\n+      method:\"GET\",\n+      url:'http://localhost:3000/api/user/logout'\n+    })\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n+  const roleSideBar = () => {\n+    setUser({...user, roleVisible: !user.roleVisible});\n+  }\n   return {\n     user,\n     signin,\n     logout,\n-    visibleSideBar\n+    visibleSideBar,\n+    roleSideBar\n   }\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644824311707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -52,9 +52,9 @@\n     setUser({...user, ...response.data});\n     sessionStorage.setItem('token', response.data.token);\n     return response.data;\n   }\n-  const logout = () => {\n+  const logout = async () => {\n     sessionStorage.removeItem('token');\n     setUser({...user, id:null, token:null});\n     await axios({\n       method:\"GET\",\n"
+                },
+                {
+                    "date": 1644824592659,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n import { useState, useContext, createContext, useEffect } from 'react';\n+import API from '../config/index';\n import axios from 'axios';\n \n \n const authContext = createContext();\n"
+                },
+                {
+                    "date": 1644824618815,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,8 @@\n         password: password\n       },\n     });\n     setUser({...user, ...response.data});\n-    sessionStorage.setItem('token', response.data.token);\n     return response.data;\n   }\n   const logout = async () => {\n     sessionStorage.removeItem('token');\n"
+                },
+                {
+                    "date": 1644824706497,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,17 +41,27 @@\n       })\n     }\n   },[user]);\n   const signin = async (email, password) => {\n-    const response = await axios({\n+    // const response = await axios({\n+    //   method: \"POST\",\n+    //   url: \"http://localhost:3000/api/user/login\",\n+    //   data: {\n+    //     email: email,\n+    //     password: password\n+    //   },\n+    // });\n+    // setUser({...user, ...response.data});\n+    // return response.data;\n+    const response = await API({\n       method: \"POST\",\n-      url: \"http://localhost:3000/api/user/login\",\n-      data: {\n+      url:\"/api/user/login\",\n+      data:{\n         email: email,\n-        password: password\n-      },\n+        password: password,\n+      }\n     });\n-    setUser({...user, ...response.data});\n+    setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n     sessionStorage.removeItem('token');\n"
+                },
+                {
+                    "date": 1644824794153,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -63,13 +63,12 @@\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n-    sessionStorage.removeItem('token');\n     setUser({...user, id:null, token:null});\n-    await axios({\n+    await API({\n       method:\"GET\",\n-      url:'http://localhost:3000/api/user/logout'\n+      url:\"/api/user/logout\"\n     })\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n"
+                },
+                {
+                    "date": 1644824801431,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,18 +41,8 @@\n       })\n     }\n   },[user]);\n   const signin = async (email, password) => {\n-    // const response = await axios({\n-    //   method: \"POST\",\n-    //   url: \"http://localhost:3000/api/user/login\",\n-    //   data: {\n-    //     email: email,\n-    //     password: password\n-    //   },\n-    // });\n-    // setUser({...user, ...response.data});\n-    // return response.data;\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n       data:{\n"
+                },
+                {
+                    "date": 1644824912016,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,18 +26,29 @@\n   });\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     if(!user.id && !user.token && token ){\n-      axios({\n-        url:'http://localhost:3000/api/user/auth',\n-        method:'get',\n+      // axios({\n+      //   url:'http://localhost:3000/api/user/auth',\n+      //   method:'get',\n+      //   headers:{\n+      //     authorization: token\n+      //   }\n+      // }).then((response) => {\n+      //   setUser({...user, ...response.data});\n+      // }).catch((error) => {\n+      //   sessionStorage.removeItem('token');\n+      //   console.error(error);\n+      // })\n+      API({\n+        url:\"/api/user/auth\",\n+        method:\"GET\",\n         headers:{\n           authorization: token\n         }\n       }).then((response) => {\n-        setUser({...user, ...response.data});\n+        setUser({...user,...response.data});\n       }).catch((error) => {\n-        sessionStorage.removeItem('token');\n         console.error(error);\n       })\n     }\n   },[user]);\n"
+                },
+                {
+                    "date": 1644824938102,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -60,8 +60,9 @@\n         email: email,\n         password: password,\n       }\n     });\n+    console.log(response.data);\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644824981874,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -60,8 +60,11 @@\n         email: email,\n         password: password,\n       }\n     });\n+    await API.defaults({header:{\n+      authorization:`Bearer ${response.data.token}`\n+    }})\n     console.log(response.data);\n     setUser({...user,... response.data});\n     return response.data;\n   }\n"
+                },
+                {
+                    "date": 1644824988229,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -63,9 +63,8 @@\n     });\n     await API.defaults({header:{\n       authorization:`Bearer ${response.data.token}`\n     }})\n-    console.log(response.data);\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644825086826,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -60,11 +60,9 @@\n         email: email,\n         password: password,\n       }\n     });\n-    await API.defaults({header:{\n-      authorization:`Bearer ${response.data.token}`\n-    }})\n+    await API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644825657834,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,20 +26,8 @@\n   });\n   useEffect(() => {\n     const token = sessionStorage.getItem('token');\n     if(!user.id && !user.token && token ){\n-      // axios({\n-      //   url:'http://localhost:3000/api/user/auth',\n-      //   method:'get',\n-      //   headers:{\n-      //     authorization: token\n-      //   }\n-      // }).then((response) => {\n-      //   setUser({...user, ...response.data});\n-      // }).catch((error) => {\n-      //   sessionStorage.removeItem('token');\n-      //   console.error(error);\n-      // })\n       API({\n         url:\"/api/user/auth\",\n         method:\"GET\",\n         headers:{\n@@ -60,9 +48,9 @@\n         email: email,\n         password: password,\n       }\n     });\n-    await API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n+    API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644825700037,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,8 @@\n     visible:false,\n     roleVisible:false\n   });\n   useEffect(() => {\n-    const token = sessionStorage.getItem('token');\n     if(!user.id && !user.token && token ){\n       API({\n         url:\"/api/user/auth\",\n         method:\"GET\",\n"
+                },
+                {
+                    "date": 1644825705769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n     visible:false,\n     roleVisible:false\n   });\n   useEffect(() => {\n-    if(!user.id && !user.token && token ){\n+    if(!user.id && !user.token ){\n       API({\n         url:\"/api/user/auth\",\n         method:\"GET\",\n         headers:{\n"
+                },
+                {
+                    "date": 1644825725451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -47,9 +47,9 @@\n         email: email,\n         password: password,\n       }\n     });\n-    API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n+    API.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644825735418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       API({\n         url:\"/api/user/auth\",\n         method:\"GET\",\n         headers:{\n-          authorization: token\n+          authorization: user.token\n         }\n       }).then((response) => {\n         setUser({...user,...response.data});\n       }).catch((error) => {\n"
+                },
+                {
+                    "date": 1644825863931,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,12 +27,9 @@\n   useEffect(() => {\n     if(!user.id && !user.token ){\n       API({\n         url:\"/api/user/auth\",\n-        method:\"GET\",\n-        headers:{\n-          authorization: user.token\n-        }\n+        method:\"GET\"\n       }).then((response) => {\n         setUser({...user,...response.data});\n       }).catch((error) => {\n         console.error(error);\n"
+                },
+                {
+                    "date": 1644826016634,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,10 @@\n   useEffect(() => {\n     if(!user.id && !user.token ){\n       API({\n         url:\"/api/user/auth\",\n-        method:\"GET\"\n+        method:\"GET\",\n+        withCredentials: true\n       }).then((response) => {\n         setUser({...user,...response.data});\n       }).catch((error) => {\n         console.error(error);\n"
+                },
+                {
+                    "date": 1644826145808,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n         email: email,\n         password: password,\n       }\n     });\n-    API.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;\n+    API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644826734400,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,9 @@\n         email: email,\n         password: password,\n       }\n     });\n+    console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n"
+                },
+                {
+                    "date": 1644827471081,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,10 @@\n       url:\"/api/user/login\",\n       data:{\n         email: email,\n         password: password,\n-      }\n+      },\n+      withCredentials: true\n     });\n     console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n"
+                },
+                {
+                    "date": 1644827510004,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,8 @@\n       data:{\n         email: email,\n         password: password,\n       },\n-      withCredentials: true\n     });\n     console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n"
+                },
+                {
+                    "date": 1644827630904,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -47,8 +47,9 @@\n       },\n     });\n     console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n+    console.log(response);\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644827876522,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -47,9 +47,8 @@\n       },\n     });\n     console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n-    console.log(response);\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644827932831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,20 +23,23 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n+  // useEffect(() => {\n+  //   if(!user.id && !user.token ){\n+  //     API({\n+  //       url:\"/api/user/auth\",\n+  //       method:\"GET\",\n+  //       withCredentials: true\n+  //     }).then((response) => {\n+  //       setUser({...user,...response.data});\n+  //     }).catch((error) => {\n+  //       console.error(error);\n+  //     })\n+  //   }\n+  // },[user]);\n   useEffect(() => {\n-    if(!user.id && !user.token ){\n-      API({\n-        url:\"/api/user/auth\",\n-        method:\"GET\",\n-        withCredentials: true\n-      }).then((response) => {\n-        setUser({...user,...response.data});\n-      }).catch((error) => {\n-        console.error(error);\n-      })\n-    }\n+    API.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n"
+                },
+                {
+                    "date": 1644828031709,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,11 @@\n   //     })\n   //   }\n   // },[user]);\n   useEffect(() => {\n+    if(user){\n     API.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;\n+    }\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n"
+                },
+                {
+                    "date": 1644828073636,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,13 +36,8 @@\n   //       console.error(error);\n   //     })\n   //   }\n   // },[user]);\n-  useEffect(() => {\n-    if(user){\n-    API.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;\n-    }\n-  },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644828138547,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -55,9 +55,10 @@\n     setUser({...user, id:null, token:null});\n     await API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n-    })\n+    });\n+    API.defaults.headers.common['Authorization'] = ''\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644828238192,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -56,9 +56,9 @@\n     await API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     });\n-    API.defaults.headers.common['Authorization'] = ''\n+    API.defaults.headers.common['Authorization'] = null;\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644830636158,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,21 +23,8 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n-  // useEffect(() => {\n-  //   if(!user.id && !user.token ){\n-  //     API({\n-  //       url:\"/api/user/auth\",\n-  //       method:\"GET\",\n-  //       withCredentials: true\n-  //     }).then((response) => {\n-  //       setUser({...user,...response.data});\n-  //     }).catch((error) => {\n-  //       console.error(error);\n-  //     })\n-  //   }\n-  // },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644830645925,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,8 @@\n     await API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     });\n-    API.defaults.headers.common['Authorization'] = null;\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644830662164,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,8 @@\n         email: email,\n         password: password,\n       },\n     });\n-    console.log(response.data.token);\n     API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n"
+                },
+                {
+                    "date": 1644831100203,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n-import { useState, useContext, createContext, useEffect } from 'react';\n+import { useState, useContext, createContext } from 'react';\n import API from '../config/index';\n-import axios from 'axios';\n \n \n const authContext = createContext();\n \n"
+                },
+                {
+                    "date": 1644831140171,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n import { useState, useContext, createContext } from 'react';\n+import useUpdateEffect from './useUpdateEffect';\n import API from '../config/index';\n \n \n const authContext = createContext();\n@@ -22,8 +23,14 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n+\n+  useUpdateEffect(() => {\n+    API({\n+      \n+    })\n+  },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644831216150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,10 +26,17 @@\n   });\n \n   useUpdateEffect(() => {\n     API({\n-      \n+      method:'GET',\n+      url:\"/api/user/auth\"\n     })\n+    .then((response) => {\n+      setUser({...user, ...response.data});\n+    })\n+    .catch((error)=>{\n+      console.error(error);\n+    })\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n"
+                },
+                {
+                    "date": 1644831266746,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,8 +25,9 @@\n     roleVisible:false\n   });\n \n   useUpdateEffect(() => {\n+    if(!user){\n     API({\n       method:'GET',\n       url:\"/api/user/auth\"\n     })\n@@ -35,8 +36,9 @@\n     })\n     .catch((error)=>{\n       console.error(error);\n     })\n+  }\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n"
+                },
+                {
+                    "date": 1644831746898,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { useState, useContext, createContext } from 'react';\n+import { useState, useContext, createContext, useEffect } from 'react';\n import useUpdateEffect from './useUpdateEffect';\n import API from '../config/index';\n \n \n@@ -24,22 +24,22 @@\n     visible:false,\n     roleVisible:false\n   });\n \n-  useUpdateEffect(() => {\n-    if(!user){\n-    API({\n-      method:'GET',\n-      url:\"/api/user/auth\"\n-    })\n-    .then((response) => {\n-      setUser({...user, ...response.data});\n-    })\n-    .catch((error)=>{\n-      console.error(error);\n-    })\n-  }\n-  },[user]);\n+  // useUpdateEffect(() => {\n+  //   if(!user){\n+  //   API({\n+  //     method:'GET',\n+  //     url:\"/api/user/auth\"\n+  //   })\n+  //   .then((response) => {\n+  //     setUser({...user, ...response.data});\n+  //   })\n+  //   .catch((error)=>{\n+  //     console.error(error);\n+  //   })\n+  // }\n+  // },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644831811391,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,8 +38,22 @@\n   //     console.error(error);\n   //   })\n   // }\n   // },[user]);\n+  useEffect(() => {\n+    if(!user){\n+      API({\n+        method:\"GET\",\n+        url:'/api/user/auth'\n+      })\n+      .then((response) => {\n+        console.log(response.data);\n+      })\n+      .catch((error) => {\n+        console.error(error);\n+      })\n+    }\n+  },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644831866018,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n   //   })\n   // }\n   // },[user]);\n   useEffect(() => {\n-    if(!user){\n+    if(!user.token){\n       API({\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n"
+                },
+                {
+                    "date": 1644832028574,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n-        console.log(response.data);\n+        setUser({...user, ...response.data});\n       })\n       .catch((error) => {\n         console.error(error);\n       })\n"
+                },
+                {
+                    "date": 1644832085856,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -66,13 +66,14 @@\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n-    setUser({...user, id:null, token:null});\n+\n     await API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     });\n+    setUser(null);\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644832139544,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -71,9 +71,9 @@\n     await API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     });\n-    setUser(null);\n+    setUser({user:null, ...user});\n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644832190357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -67,13 +67,17 @@\n     return response.data;\n   }\n   const logout = async () => {\n \n-    await API({\n+     API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n-    });\n-    setUser({user:null, ...user});\n+    }).then((response) => {\n+      setUser({...user, user:null })\n+    }).catch((error) => {\n+      console.error(error)\n+    })\n+    \n   }\n   const visibleSideBar = () => {\n     setUser({...user, visible:!user.visible})\n   }\n"
+                },
+                {
+                    "date": 1644832221236,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n   //   })\n   // }\n   // },[user]);\n   useEffect(() => {\n-    if(!user.token){\n+    if(!user.token && user !== null){\n       API({\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n"
+                },
+                {
+                    "date": 1644832312808,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n   //   })\n   // }\n   // },[user]);\n   useEffect(() => {\n-    if(!user.token && user !== null){\n+    if(!user.token && !user.id){\n       API({\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n"
+                },
+                {
+                    "date": 1644832360169,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n-        setUser({...user, ...response.data});\n+        setUser({...user, ...response.data, token: null, id: null});\n       })\n       .catch((error) => {\n         console.error(error);\n       })\n"
+                },
+                {
+                    "date": 1644832429866,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,11 @@\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n-        setUser({...user, ...response.data, token: null, id: null});\n+        if(response.data.status){\n+        setUser({...user, user:null});\n+        }\n       })\n       .catch((error) => {\n         console.error(error);\n       })\n"
+                },
+                {
+                    "date": 1644832444181,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,9 @@\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n         if(response.data.status){\n-        setUser({...user, user:null});\n+        setUser({...user, user:null, token: null, id: null});\n         }\n       })\n       .catch((error) => {\n         console.error(error);\n"
+                },
+                {
+                    "date": 1644832500908,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n-        if(response.data.status){\n+        if(!response.data.status){\n         setUser({...user, user:null, token: null, id: null});\n         }\n       })\n       .catch((error) => {\n"
+                },
+                {
+                    "date": 1644832523816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,11 +45,11 @@\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n       .then((response) => {\n-        if(!response.data.status){\n-        setUser({...user, user:null, token: null, id: null});\n-        }\n+        \n+        setUser({...user, ...response.data});\n+        \n       })\n       .catch((error) => {\n         console.error(error);\n       })\n"
+                },
+                {
+                    "date": 1644832550362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -73,9 +73,11 @@\n      API({\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     }).then((response) => {\n-      setUser({...user, user:null })\n+      if(response.data.status){\n+      setUser({...user, user:null,token: null, id: null })\n+      }\n     }).catch((error) => {\n       console.error(error)\n     })\n     \n"
+                },
+                {
+                    "date": 1644832602737,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -74,9 +74,9 @@\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     }).then((response) => {\n       if(response.data.status){\n-      setUser({...user, user:null,token: null, id: null })\n+      setUser({user: null, visible: false, roleVisible: false });\n       }\n     }).catch((error) => {\n       console.error(error)\n     })\n"
+                },
+                {
+                    "date": 1644832630673,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n   //   })\n   // }\n   // },[user]);\n   useEffect(() => {\n-    if(!user.token && !user.id){\n+    if(!user.token && !user.id && user === null){\n       API({\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n"
+                },
+                {
+                    "date": 1644832651685,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n   //   })\n   // }\n   // },[user]);\n   useEffect(() => {\n-    if(!user.token && !user.id && user === null){\n+    if(!user.token && !user.id){\n       API({\n         method:\"GET\",\n         url:'/api/user/auth'\n       })\n"
+                },
+                {
+                    "date": 1644832716618,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -63,9 +63,8 @@\n         email: email,\n         password: password,\n       },\n     });\n-    API.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644832730883,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,23 +23,8 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n-\n-  // useUpdateEffect(() => {\n-  //   if(!user){\n-  //   API({\n-  //     method:'GET',\n-  //     url:\"/api/user/auth\"\n-  //   })\n-  //   .then((response) => {\n-  //     setUser({...user, ...response.data});\n-  //   })\n-  //   .catch((error)=>{\n-  //     console.error(error);\n-  //   })\n-  // }\n-  // },[user]);\n   useEffect(() => {\n     if(!user.token && !user.id){\n       API({\n         method:\"GET\",\n"
+                },
+                {
+                    "date": 1644842751142,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,24 +23,24 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n-  useEffect(() => {\n-    if(!user.token && !user.id){\n-      API({\n-        method:\"GET\",\n-        url:'/api/user/auth'\n-      })\n-      .then((response) => {\n+  // useEffect(() => {\n+  //   if(!user.token && !user.id){\n+  //     API({\n+  //       method:\"GET\",\n+  //       url:'/api/user/auth'\n+  //     })\n+  //     .then((response) => {\n         \n-        setUser({...user, ...response.data});\n+  //       setUser({...user, ...response.data});\n         \n-      })\n-      .catch((error) => {\n-        console.error(error);\n-      })\n-    }\n-  },[user]);\n+  //     })\n+  //     .catch((error) => {\n+  //       console.error(error);\n+  //     })\n+  //   }\n+  // },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644846643704,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,24 +23,8 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n-  // useEffect(() => {\n-  //   if(!user.token && !user.id){\n-  //     API({\n-  //       method:\"GET\",\n-  //       url:'/api/user/auth'\n-  //     })\n-  //     .then((response) => {\n-        \n-  //       setUser({...user, ...response.data});\n-        \n-  //     })\n-  //     .catch((error) => {\n-  //       console.error(error);\n-  //     })\n-  //   }\n-  // },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n"
+                },
+                {
+                    "date": 1644846672222,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,8 +42,9 @@\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     }).then((response) => {\n       if(response.data.status){\n+        API.defaults.headers.common['x-auth-acces'] = response.data.accessToken;\n       setUser({user: null, visible: false, roleVisible: false });\n       }\n     }).catch((error) => {\n       console.error(error)\n"
+                },
+                {
+                    "date": 1644846680799,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,9 +42,8 @@\n       method:\"GET\",\n       url:\"/api/user/logout\"\n     }).then((response) => {\n       if(response.data.status){\n-        API.defaults.headers.common['x-auth-acces'] = response.data.accessToken;\n       setUser({user: null, visible: false, roleVisible: false });\n       }\n     }).catch((error) => {\n       console.error(error)\n"
+                },
+                {
+                    "date": 1644846687255,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,8 +32,9 @@\n         email: email,\n         password: password,\n       },\n     });\n+    API.defaults.headers.common['x-auth-acces'] = response.data.accessToken;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644846728295,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { useState, useContext, createContext, useEffect } from 'react';\n+import { useState, useContext, createContext } from 'react';\n import useUpdateEffect from './useUpdateEffect';\n import API from '../config/index';\n \n \n"
+                },
+                {
+                    "date": 1644847001445,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { useState, useContext, createContext } from 'react';\n+import { useState, useContext, createContext, useEffect } from 'react';\n import useUpdateEffect from './useUpdateEffect';\n import API from '../config/index';\n \n \n@@ -23,8 +23,11 @@\n     user:null,\n     visible:false,\n     roleVisible:false\n   });\n+  useEffect(() => {\n+    API.defaults.headers.common['x-auth-acces'] = user.accessToken;\n+  },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n       url:\"/api/user/login\",\n@@ -32,9 +35,8 @@\n         email: email,\n         password: password,\n       },\n     });\n-    API.defaults.headers.common['x-auth-acces'] = response.data.accessToken;\n     setUser({...user,... response.data});\n     return response.data;\n   }\n   const logout = async () => {\n"
+                },
+                {
+                    "date": 1644847042689,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,8 +24,9 @@\n     visible:false,\n     roleVisible:false\n   });\n   useEffect(() => {\n+    console.log(user);\n     API.defaults.headers.common['x-auth-acces'] = user.accessToken;\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n"
+                },
+                {
+                    "date": 1644847064289,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n     visible:false,\n     roleVisible:false\n   });\n   useEffect(() => {\n-    console.log(user);\n+    console.log(API.defaults);\n     API.defaults.headers.common['x-auth-acces'] = user.accessToken;\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n"
+                },
+                {
+                    "date": 1644847389031,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,9 @@\n   });\n   useEffect(() => {\n     console.log(API.defaults);\n     API.defaults.headers.common['x-auth-acces'] = user.accessToken;\n+    API.defaults.headers.common['x-auth-refresh'] = user.refreshToken;\n   },[user]);\n   const signin = async (email, password) => {\n     const response = await API({\n       method: \"POST\",\n"
+                },
+                {
+                    "date": 1644847447735,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n     visible:false,\n     roleVisible:false\n   });\n   useEffect(() => {\n-    console.log(API.defaults);\n+    \n     API.defaults.headers.common['x-auth-acces'] = user.accessToken;\n     API.defaults.headers.common['x-auth-refresh'] = user.refreshToken;\n   },[user]);\n   const signin = async (email, password) => {\n"
                 }
             ],
             "date": 1643030575331,

@@ -1,0 +1,30 @@
+{
+    "sourceFile": "pages/api/user/generaterefresh.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1644845376921,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644845499031,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,23 @@\n import { withSessionRoute } from '../../../lib/sessionsWrappers';\n+import dbConnect from '../../../lib/mongooseConnect';\n \n \n-\n export default withSessionRoute(handler);\n \n \n \n async function handler(req,res){\n-  \n+  const { method } = req;\n+  const { refreshToken } = req.body;\n+\n+  switch(method){\n+    case \"GET\":{\n+      try{\n+        await dbConnect();\n+\n+      }catch(e){\n+        return res.status(500).json({message:\"Invalid server\", status: false, error: e});\n+      }\n+    }\n+  }\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1644845680774,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import { withSessionRoute } from '../../../lib/sessionsWrappers';\n import dbConnect from '../../../lib/mongooseConnect';\n+import Token from 'models/token.model';\n+import jwt from 'jsonwebtoken';\n \n-\n export default withSessionRoute(handler);\n \n \n \n@@ -13,9 +14,22 @@\n   switch(method){\n     case \"GET\":{\n       try{\n         await dbConnect();\n+        if(!refreshToken){\n+          return res.status(403).json({message:\" Access denied, token missing\"});\n \n+        }else{\n+          const token = await Token.findOne({token: refreshToken});\n+          if(!token){\n+            return res.status(401).json({error: \"Token expired\"});\n+          }else{\n+            const payload = jwt.verify(token.token, process.env.REFRESH_SECRET);\n+            const accessToken = jwt.sign({user: payload}, process.env.SECRET, { expiresIn: \"10m\" });\n+\n+            return res.status(200).json({accessToken});\n+          }\n+        }\n       }catch(e){\n         return res.status(500).json({message:\"Invalid server\", status: false, error: e});\n       }\n     }\n"
+                },
+                {
+                    "date": 1644845710890,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,6 +32,8 @@\n       }catch(e){\n         return res.status(500).json({message:\"Invalid server\", status: false, error: e});\n       }\n     }\n+    default:\n+      return res.status(500).json({message:\"Invalid method\", status: false});\n   }\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1644845376921,
+            "name": "Commit-0",
+            "content": "import { withSessionRoute } from '../../../lib/sessionsWrappers';\n\n\n\nexport default withSessionRoute(handler);\n\n\n\nasync function handler(req,res){\n  \n}"
+        }
+    ]
+}

@@ -1,0 +1,58 @@
+{
+    "sourceFile": "pages/api/user/auth.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1644825883668,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644825897990,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers.authorization;\n+  const token = req.headers\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644826194840,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers\n+  const token = req.headers.authorization.split(' ')[1]\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644826251853,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers.authorization.split(' ')[1]\n+  const token = req.headers.authorization;\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644826284015,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers.authorization;\n+  const token = req.headers('authorization');\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644826571013,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import dbConnect from '../../../lib/mongooseConnect';\n import jwt from 'jsonwebtoken';\n import User from '../../../models/user.model';\n-\n+import { withSessionRoute } from '../../../lib/sessionsWrappers';\n /**\n  * \n  * @swagger \n  * /api/user/auth:\n"
+                },
+                {
+                    "date": 1644826589329,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n  *        response:\n  *            200:\n  * description: Object\n  */\n-\n+export default withSessionRoute(handler);\n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n   const token = req.headers('authorization');\n@@ -38,7 +38,7 @@\n \n \n \n \n-export default handler;\n \n \n+\n"
+                },
+                {
+                    "date": 1644826628158,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,12 +12,13 @@\n  *            200:\n  * description: Object\n  */\n export default withSessionRoute(handler);\n+\n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers('authorization');\n+  const token = req.headers.authorization;\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644826665448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers.authorization;\n+  const token = req.headers\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644831949182,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.headers\n+  const token = req.session.user;\n   console.log(token);\n   switch(method){\n \n     case \"GET\":{\n"
+                },
+                {
+                    "date": 1644831982913,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,14 +16,14 @@\n \n async function handler(req,res){\n   const {method} = req;\n   await dbConnect();\n-  const token = req.session.user;\n-  console.log(token);\n+ \n   switch(method){\n \n     case \"GET\":{\n-      const decode = jwt.decode(req.headers.authorization, process.env.SECRET);\n+      const token = req.session.user;\n+      const decode = jwt.decode(token, process.env.SECRET);\n       const user = await User.findOne({email:decode.data}).populate('password');\n       if(!user){\n         return res.status(400).json({message:\"Invalid\"});\n       }\n"
+                }
+            ],
+            "date": 1644825883668,
+            "name": "Commit-0",
+            "content": "import dbConnect from '../../../lib/mongooseConnect';\nimport jwt from 'jsonwebtoken';\nimport User from '../../../models/user.model';\n\n/**\n * \n * @swagger \n * /api/user/auth:\n *      get:\n *        description: if we reload page and token are valid then\n *        response:\n *            200:\n * description: Object\n */\n\nasync function handler(req,res){\n  const {method} = req;\n  await dbConnect();\n  const token = req.headers.authorization;\n  console.log(token);\n  switch(method){\n\n    case \"GET\":{\n      const decode = jwt.decode(req.headers.authorization, process.env.SECRET);\n      const user = await User.findOne({email:decode.data}).populate('password');\n      if(!user){\n        return res.status(400).json({message:\"Invalid\"});\n      }\n      return res.status(200).json({mesasge:\"OK\",id: user._id, role: user.role, token: token});\n    }\n    default:\n      return res.status(400).json({message:\"Invalid method\", status:\"OK\"});\n  }\n\n\n}\n\n\n\n\n\nexport default handler;\n\n\n"
+        }
+    ]
+}

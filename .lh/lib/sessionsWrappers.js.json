@@ -1,0 +1,22 @@
+{
+    "sourceFile": "lib/sessionsWrappers.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1644821773879,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1644821830071,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,5 +6,15 @@\n   cookieName:\"user-session\",\n   cookieOptions:{\n     secure: process.env.SECRET\n   }\n+};\n+\n+\n+export function withSessionRoute(handler){\n+  return withIronSessionApiRoute(handler, sessionOptions)\n+};\n+\n+\n+export function withSessionSSR(handler){\n+  return withIronSessionSsr(handler, sessionOptions);\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1644821773879,
+            "name": "Commit-0",
+            "content": "import { withIronSessionApiRoute, withIronSessionSsr } from \"iron-session/next\";\n\n\nconst sessionOptions = {\n  password:\"33773377337733773377337733773377\",\n  cookieName:\"user-session\",\n  cookieOptions:{\n    secure: process.env.SECRET\n  }\n}"
+        }
+    ]
+}
